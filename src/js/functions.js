@@ -61,9 +61,9 @@ function getTotalCrimesByDistrict (data) {
 
 function getTotalCrimesByCommunityArea (data) {
     const result = {};
-    data.forEach(currCrime => {   
+    data.forEach(currCrime => {
       const {primary_type, community_area} = currCrime;
-      
+
       if (!result[community_area]) {
         result[community_area] = {};
       }

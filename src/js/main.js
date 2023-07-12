@@ -1,5 +1,5 @@
-import {fetchDataChicago, fetchDataChicagoByYear} from './APIChicagoCrime.js';
-import {drawMap} from './d3MapCrime.js';
+import {fetchDataChicago, fetchDataChicagoByYear} from './APIChicagoCrime.js'; // to download chicago data
+import {drawMap} from './d3MapCrime.js'; // to mapping crime 
 import 
 {getTotalCrimesByBeat, getTotalCrimesByCommunityArea, getTotalCrimesByWard, getTotalCrimesByDistrict, sortObjectEntries} 
 from './functions.js'
@@ -11,15 +11,16 @@ btnChicagoMap.addEventListener('click', showMapChicago);
 async function showMapChicago (){
   
     try {
-        const dataChicago = await fetchDataChicago(2001);        
+        const dataChicago = await fetchDataChicago();        
 
-        console.log(typeof dataChicago);
+        console.log(`Tipo de datos de Chicago ${ typeof dataChicago}`);
         
-        console.log( dataChicago);
+        console.log(`Data Chicago ${JSON.stringify(dataChicago,null,2)}`);
+        console.log(`Cantidad de datos: `, dataChicago.length);
         
         const dataChicagoYear = await fetchDataChicagoByYear(2001);
 
-        console.log(dataChicagoYear);
+        console.log(`Cantidad de dato chicago en años ${JSON.stringify(dataChicagoYear,null,2)}`);
 
         let chicagoCrimeWard = {};
         let chicagoCrimeBeat = {};
@@ -35,13 +36,13 @@ async function showMapChicago (){
         // console.log(chicagoCrimeWard);
 
         chicagoCrimeBeat = getTotalCrimesByBeat(dataChicago);
-        console.log(chicagoCrimeBeat);
+        console.log(`Chicago crime beat ${JSON.stringify(chicagoCrimeBeat,null,2)}`);
         chicagoCrimeWard = getTotalCrimesByWard(dataChicago);
-        console.log(chicagoCrimeWard);
+        console.log(`Chicago crime Wardt ${JSON.stringify(chicagoCrimeWard,null,2)}`);
         chicagoCrimeDistrict = getTotalCrimesByDistrict(dataChicago);
-        console.log(chicagoCrimeDistrict);
+        console.log(`Chicago crime District ${JSON.stringify(chicagoCrimeDistrict,null,2)}`);
         chicagoCrimeCommunityArea = getTotalCrimesByCommunityArea(dataChicago);
-        console.log(chicagoCrimeCommunityArea);
+        console.log(`Chicago crime CommunityArea ${JSON.stringify(chicagoCrimeCommunityArea,null,2)}`);
 
 
         // const objSorted = sortObjectEntries(chicagoCrimeCommunityArea)

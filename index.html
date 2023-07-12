@@ -22,8 +22,20 @@
    
     
     <div class="container">
-      <div class="row" style="border-radius: 10px; border: 1px solid lightgray; width:100%; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
+      <div class="mapContainer">
+        <select id = "selectMap">
+          <option value="">Seleccione una escala</option>
+          <option value="beat">by Beats</option>
+          <option value="ward">by Wards</option>
+          <option value="district">by District</option>
+          <option value="community_area">by Community Area</option>
+        </select>
+        
+        <div class="map"></div>
+      </div>
 
+      <div class="row" style="border-radius: 10px; border: 1px solid lightgray; width:100%; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
+        
         <form action="main.js" method="">
           <h3>Chicha Crime</h3>					
           
@@ -40,5 +52,6 @@
     
     <script type="module" src="src/js/main.js"></script>
     <script type="module" src="src/js/data.js"></script>
+    <script type="module" src="src/js/drawMap/drawMapSpatial.js"></script>
   </body>
 </html>
