@@ -24,7 +24,7 @@ export async function fetchDataChicagoByYear (year) {
       url: `https://data.cityofchicago.org/resource/ijzp-q8t2.json?year=${setYear}`,
       type: "GET",
       data: {
-        "$limit": 500,
+        "$limit": 5000,
         "$$app_token": "3cJyRnxM0CrRL3CRjJONj4Xez"
       }
     });

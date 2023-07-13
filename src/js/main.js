@@ -13,14 +13,15 @@ async function showMapChicago (){
     try {
         const dataChicago = await fetchDataChicago();        
 
-        console.log(`Tipo de datos de Chicago ${ typeof dataChicago}`);
+        // console.log(`Tipo de datos de Chicago ${ typeof dataChicago}`);
         
-        console.log(`Data Chicago ${JSON.stringify(dataChicago,null,2)}`);
-        console.log(`Cantidad de datos: `, dataChicago.length);
+        // console.log(`Data Chicago ${JSON.stringify(dataChicago,null,2)}`);
+        // console.log(`Cantidad de datos: `, dataChicago.length);
         
         const dataChicagoYear = await fetchDataChicagoByYear(2001);
-
-        console.log(`Cantidad de dato chicago en años ${JSON.stringify(dataChicagoYear,null,2)}`);
+        
+        // console.log(`Cantidad de dato chicago ${JSON.stringify(dataChicago,null,2)}`);
+        // console.log(`Cantidad de dato chicago en años ${JSON.stringify(dataChicagoYear,null,2)}`);
 
         let chicagoCrimeWard = {};
         let chicagoCrimeBeat = {};
@@ -35,13 +36,14 @@ async function showMapChicago (){
 
         // console.log(chicagoCrimeWard);
 
-        chicagoCrimeBeat = getTotalCrimesByBeat(dataChicago);
+        console.log("DATA FOR WORK");
+        chicagoCrimeBeat = getTotalCrimesByBeat(dataChicagoYear);
         console.log(`Chicago crime beat ${JSON.stringify(chicagoCrimeBeat,null,2)}`);
-        chicagoCrimeWard = getTotalCrimesByWard(dataChicago);
+        chicagoCrimeWard = getTotalCrimesByWard(dataChicagoYear);
         console.log(`Chicago crime Wardt ${JSON.stringify(chicagoCrimeWard,null,2)}`);
-        chicagoCrimeDistrict = getTotalCrimesByDistrict(dataChicago);
+        chicagoCrimeDistrict = getTotalCrimesByDistrict(dataChicagoYear);
         console.log(`Chicago crime District ${JSON.stringify(chicagoCrimeDistrict,null,2)}`);
-        chicagoCrimeCommunityArea = getTotalCrimesByCommunityArea(dataChicago);
+        chicagoCrimeCommunityArea = getTotalCrimesByCommunityArea(dataChicagoYear);
         console.log(`Chicago crime CommunityArea ${JSON.stringify(chicagoCrimeCommunityArea,null,2)}`);
 
 
