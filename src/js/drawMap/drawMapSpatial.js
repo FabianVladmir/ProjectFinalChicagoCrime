@@ -142,7 +142,13 @@ async function drawMap(boundariesCurrent,byYear){
     sumTotal+=percent;
   }
   console.log(percentByLocation);
-  percentByLocation = percentByLocation.map(percent => 1/percent);
+  // percentByLocation = percentByLocation.map(percent => 1/percent);
+
+  //normalization
+  percentByLocation = percentByLocation.map(function(value) {
+    return (1 / value)*100;
+  });
+  
   console.log(percentByLocation);
   
   //each boundaries
@@ -159,7 +165,8 @@ async function drawMap(boundariesCurrent,byYear){
         })
         .attr('stroke-width', 1.5)
         // .attr("fill", 'rgb('+ (212 * percentByLocation[i]) +',' + (173 * percentByLocation[i]) + ','+ (252 * percentByLocation[i]) +')')
-        .attr("fill", 'rgb(0,' + (255 * percentByLocation[i] * 80) + ',0)')
+        .attr("fill", 'rgb(0,' + (255 * percentByLocation[i]) + ',0)')
+        .attr("subLocation", locationList[i])
         // .attr("fill", '#D0D0D0')
         
         // rgb(212, 173, 252)
@@ -176,27 +183,37 @@ async function drawMap(boundariesCurrent,byYear){
 
         // })
         .on("click", function () {
-          var coordinates = d3.select(this).data()[0];
+          let coordinates = d3.select(this).data()[0];
           // console.log(coordinates);
-          var centroid = d3.polygonCentroid(coordinates);
-        
-          var xPosition = x(centroid[0]);
-          var yPosition = y(centroid[1]);
-        
-          var tooltip = d3.select("#tooltip");
+          let centroid = d3.polygonCentroid(coordinates);
+          let xPosition = x(centroid[0]);
+          let yPosition = y(centroid[1]);
+          let tooltip = d3.select("#tooltip");
           
-          // var content = locationList[k];
-          console.log(locationList);
-          
+          const numLocal = d3.select(this).attr("subLocation");
+          let content = "";
+          const byLocalRate= rateCrime[numLocal]
+          let sumTotal = 0;
+          for (const key in byLocalRate) {
+            if (Object.hasOwnProperty.call(byLocalRate, key)) {
+              const element = byLocalRate[key];
+              content += `${key}: ${element} <br>`;
+              sumTotal += element;
+            }
+          }
+
           tooltip
             .style("left", xPosition+80 + "px")
             .style("top", yPosition+270 + "px")
             .style("display", "block")
-            .text("Numero de Localidad: " + content + ": "+ "rateCrime[content]");
-          //hidden
+            .style("width", "300px")
+            // .text("Numero de Localidad: " + numLocal + ": "+ content);
+            .html("Numero de Localidad: " + numLocal + "<br> Total de Crimenes: "+ sumTotal +"<br>" + content);
+
+            //hidden
           setTimeout(function () {
             tooltip.style("display", "none");
-          }, 2000);
+          }, 8000);
         });
         
       }
