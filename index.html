@@ -11,6 +11,7 @@
     
     <script src="\node_modules\d3-geo\dist\d3-geo.min.js"></script>
 
+    <script src="\node_modules\chart.js\dist\chart.umd.js"></script>
     <title>Vite App</title>
 
     
@@ -35,10 +36,16 @@
           
         </form>
       </div>
+
+      <canvas id="line-chart" width="800" height="450"></canvas>
       
+      <div style="width: 800px;"><canvas id="acquisitions"></canvas></div>
     </div>
+
+
     
     <script type="module" src="src/js/main.js"></script>
     <script type="module" src="src/js/data.js"></script>
+    <script type="module" src="src/js/Time Series/drawLine.js"></script>
   </body>
 </html>
