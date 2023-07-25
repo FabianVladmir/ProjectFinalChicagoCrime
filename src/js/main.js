@@ -2,7 +2,9 @@ import {fetchDataChicago, fetchDataChicagoByYear} from './APIChicagoCrime.js';
 import {drawMap} from './d3MapCrime.js';
 import 
 {getTotalCrimesByBeat, getTotalCrimesByCommunityArea, getTotalCrimesByWard, getTotalCrimesByDistrict, sortObjectEntries} 
-from './functions.js'
+from './functions.js';
+
+import { countCrimesPerYear } from './Time Series/functionsTimeSeries.js';
 
 const btnChicagoMap = document.querySelector('#btnChicagoMap');
 console.log(btnChicagoMap);
@@ -11,15 +13,13 @@ btnChicagoMap.addEventListener('click', showMapChicago);
 async function showMapChicago (){
   
     try {
-        const dataChicago = await fetchDataChicago(2001);        
-
-        console.log(typeof dataChicago);
+        const dataChicago = await fetchDataChicago();
         
         console.log( dataChicago);
         
-        const dataChicagoYear = await fetchDataChicagoByYear(2001);
+        // const dataChicagoYear = await fetchDataChicagoByYear(2001);
 
-        console.log(dataChicagoYear);
+        // console.log(dataChicagoYear);
 
         let chicagoCrimeWard = {};
         let chicagoCrimeBeat = {};
@@ -34,14 +34,14 @@ async function showMapChicago (){
 
         // console.log(chicagoCrimeWard);
 
-        chicagoCrimeBeat = getTotalCrimesByBeat(dataChicago);
-        console.log(chicagoCrimeBeat);
-        chicagoCrimeWard = getTotalCrimesByWard(dataChicago);
-        console.log(chicagoCrimeWard);
-        chicagoCrimeDistrict = getTotalCrimesByDistrict(dataChicago);
-        console.log(chicagoCrimeDistrict);
-        chicagoCrimeCommunityArea = getTotalCrimesByCommunityArea(dataChicago);
-        console.log(chicagoCrimeCommunityArea);
+        // chicagoCrimeBeat = getTotalCrimesByBeat(dataChicago);
+        // console.log(chicagoCrimeBeat);
+        // chicagoCrimeWard = getTotalCrimesByWard(dataChicago);
+        // console.log(chicagoCrimeWard);
+        // chicagoCrimeDistrict = getTotalCrimesByDistrict(dataChicago);
+        // console.log(chicagoCrimeDistrict);
+        // chicagoCrimeCommunityArea = getTotalCrimesByCommunityArea(dataChicago);
+        // console.log(chicagoCrimeCommunityArea);
 
 
         // const objSorted = sortObjectEntries(chicagoCrimeCommunityArea)
@@ -77,7 +77,18 @@ async function showMapChicago (){
         console.log("Minimum values:", minValues);
         console.log("Attribute counts:", attributeCounts);
 
-        
+
+
+        const totalCrimeAllYears = countCrimesPerYear(dataChicago);
+
+        console.log(totalCrimeAllYears);
+        console.log(Object.keys(totalCrimeAllYears));
+
+        const currTotalCrimeByYear = Object.entries(totalCrimeAllYears)
+        console.log(Object.values(currTotalCrimeByYear[0][1]));
+        console.log(currTotalCrimeByYear[1]);
+
+
         // drawMap(dataChicagoJSON);        
         
 
