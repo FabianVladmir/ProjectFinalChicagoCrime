@@ -1,5 +1,47 @@
 import { Chart } from "chart.js/auto";
-new Chart(document.getElementById("line-chart"), {
+function drawTotalCrimeTimeSeries(totalCrimeAllYears){
+  const allYears = Object.keys(totalCrimeAllYears); //2001 ...
+  const totalCrimeByYear = [];
+  // const labelnn = [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050]
+  
+  Object.values(totalCrimeAllYears).forEach(currCrimesByYear=>{
+    // console.log(currCrimesByYear)
+    // console.log(Object.values(currCrimesByYear));
+    totalCrimeByYear.push(Object.values(currCrimesByYear));
+  })
+
+  const allYearsInt = allYears.map(Number);
+  const totalCrimeByYearInt = totalCrimeByYear.map(Number);
+  // console.log(labelnn);
+  console.log(allYears);
+  console.log(allYearsInt);
+  console.log(totalCrimeByYear);
+  console.log(totalCrimeByYearInt);
+  
+  new Chart(document.getElementById("line-chart-crime"),{
+    type: 'line',
+    data: {
+      labels: allYearsInt,
+      datasets: 
+      [
+        {
+        data: totalCrimeByYearInt,
+        label: "Total Crimes",
+        borderColor: "#3e95cd",
+        fill: false
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Total crimes in Chicago City'
+      }
+    }
+
+  })
+
+  new Chart(document.getElementById("line-chart"), {
     type: 'line',
     data: {
       labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
@@ -67,4 +109,9 @@ new Chart(document.getElementById("line-chart"), {
       }
     );
   })();
+
+}
   
+export{
+  drawTotalCrimeTimeSeries
+}
