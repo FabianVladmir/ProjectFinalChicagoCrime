@@ -4,9 +4,13 @@ import
 {getTotalCrimesByBeat, getTotalCrimesByCommunityArea, getTotalCrimesByWard, getTotalCrimesByDistrict, sortObjectEntries} 
 from './functions.js';
 
-import { drawTotalCrimeTimeSeries,drawTotalCrimeByTypesTimeSeries } from './Time Series/drawLine.js';
+import 
+{ drawTotalCrimeTimeSeries,drawTotalCrimeByTypesTimeSeries,drawCrimeMonthByTypes } 
+from './Time Series/drawLine.js';
 
-import { countCrimesPerYear, countCrimesPerYearBySpecificCrime } from './Time Series/functionsTimeSeries.js';
+import 
+{ countCrimesPerYear, countCrimesPerYearBySpecificCrime,counterCrimePerMounthBySpecificCrime,countCrimesPerMonth } 
+from './Time Series/functionsTimeSeries.js';
 
 const btnChicagoMap = document.querySelector('#btnChicagoMap');
 console.log(btnChicagoMap);
@@ -88,9 +92,7 @@ async function showMapChicago (){
 
         const totalCrimeAllYears = countCrimesPerYear(dataChicago);
 
-        console.log(totalCrimeAllYears);
-        // console.log(Object.keys(totalCrimeAllYears));
-
+        // console.log(totalCrimeAllYears);
 
         drawTotalCrimeTimeSeries(totalCrimeAllYears);
 
@@ -98,7 +100,17 @@ async function showMapChicago (){
 
         drawTotalCrimeByTypesTimeSeries(totalCrimeByTypes);
 
-        console.log(totalCrimeByTypes);
+        // console.log(totalCrimeByTypes);
+
+        const totalCrimeByMonths = countCrimesPerMonth(dataChicago);
+
+        console.log(totalCrimeByMonths);
+
+        const CrimeMonthByTypes = counterCrimePerMounthBySpecificCrime(dataChicago);
+
+        drawCrimeMonthByTypes(CrimeMonthByTypes,2017);
+       
+        console.log(CrimeMonthByTypes);
         // console.log(Object.values(currTotalCrimeByYear[0][1]));
         // console.log(currTotalCrimeByYear[1]);
 

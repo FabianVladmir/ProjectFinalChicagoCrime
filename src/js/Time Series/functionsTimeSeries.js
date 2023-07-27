@@ -28,14 +28,120 @@ function countCrimesPerYear(data) {
 
 function getSpecificCrime(data, typeCrime){
   const result = {};
-  
-
-
-
   // Object.values(data).forEach(currCrimeObj => {
   //   if(currCrimeObj[primary_type])
   // })
 }
+
+
+function counterCrimePerMounthBySpecificCrime(data) {
+  const months = {
+    "01": "January",
+    "02": "February",
+    "03": "March",
+    "04": "April",
+    "05": "May",
+    "06": "June",
+    "07": "July",
+    "08": "August",
+    "09": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
+  };
+
+  const result = {};
+
+  // Initialize the result object with the specified structure for each year and primary type
+  for (let year = 2001; year <= 2023; year++) {
+    result[year] = {};
+
+    // Filter primary types of interest
+    const primaryTypesOfInterest = ["THEFT", "BATTERY", "CRIMINAL DAMAGE", "NARCOTICS", "ASSAULT"];
+
+    primaryTypesOfInterest.forEach(primaryType => {
+      result[year][primaryType] = {};
+      Object.values(months).forEach(monthName => {
+        result[year][primaryType][monthName] = 0;
+      });
+    });
+  }
+
+  // Filter primary types of interest
+  const primaryTypesOfInterest = ["THEFT", "BATTERY", "CRIMINAL DAMAGE", "NARCOTICS", "ASSAULT"];
+
+  for (const key in data) {
+    if (data.hasOwnProperty(key)) {
+      const crimeObj = data[key];
+      const year = parseInt(crimeObj['year']);
+      const date = new Date(crimeObj['date']);
+      const month = months[("0" + (date.getMonth() + 1)).slice(-2)];
+      const primaryType = crimeObj['primary_type'];
+
+      // Check if the primary type is of interest
+      if (primaryTypesOfInterest.includes(primaryType)) {
+        // Increment the count for the primary type and month
+        result[year][primaryType][month]++;
+      }
+    }
+  }
+  return result; 
+
+}
+
+
+
+
+function countCrimesPerMonth(data) {
+  const months = {
+    "01": "January",
+    "02": "February",
+    "03": "March",
+    "04": "April",
+    "05": "May",
+    "06": "June",
+    "07": "July",
+    "08": "August",
+    "09": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
+  };
+
+  const result = {};
+
+  // Initialize the result object with the specified structure for each year
+  for (let year = 2002; year <= 2023; year++) {
+    result[year] = {
+      'January': 0,
+      'February': 0,
+      'March': 0,
+      'April': 0,
+      'May': 0,
+      'June': 0,
+      'July': 0,
+      'August': 0,
+      'September': 0,
+      'October': 0,
+      'November': 0,
+      'December': 0
+    };
+  }
+
+  // Iterate through each object in the data
+  for (const key in data) {
+    if (data.hasOwnProperty(key)) {
+      const crimeObj = data[key];
+      const year = parseInt(crimeObj['year']);
+      const date = new Date(crimeObj['date']);
+      const month = ("0" + (date.getMonth() + 1)).slice(-2);
+      result[year][months[month]]++;
+    }
+  }
+
+  return result;
+}
+
 
 
 function countCrimesPerYearBySpecificCrime(data) {
@@ -75,5 +181,7 @@ function countCrimesPerYearBySpecificCrime(data) {
 export {
     countCrimesPerYear,
     getSpecificCrime,
-    countCrimesPerYearBySpecificCrime
+    countCrimesPerMonth,
+    countCrimesPerYearBySpecificCrime,
+    counterCrimePerMounthBySpecificCrime
 }

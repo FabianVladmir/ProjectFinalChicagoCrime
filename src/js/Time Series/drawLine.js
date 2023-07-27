@@ -148,11 +148,11 @@ function drawTotalCrimeByTypesTimeSeries(totalCrimeByTypes){
     crimesByNarcotics.push(valueNarcotics);
     crimesByAssault.push(valueAssault);
   });
-  console.log(crimesByTheft)
-  console.log(crimesByBattery)
-  console.log(crimesByCriminalDamage)
-  console.log(crimesByNarcotics)
-  console.log(crimesByAssault)
+  // console.log(crimesByTheft)
+  // console.log(crimesByBattery)
+  // console.log(crimesByCriminalDamage)
+  // console.log(crimesByNarcotics)
+  // console.log(crimesByAssault)
 
   new Chart(document.getElementById("line-chart-crime-types"), {
     type: 'line',
@@ -198,7 +198,114 @@ function drawTotalCrimeByTypesTimeSeries(totalCrimeByTypes){
 }
 
 
+function drawCrimeMonthByTypes(crimeMonthsByTypes, year){
+  if (!crimeMonthsByTypes.hasOwnProperty(year)) {
+    return null; // Return null if the year does not exist in the data
+  }
+
+  console.log(Object.keys(crimeMonthsByTypes))
+  const yearData = crimeMonthsByTypes[year];
+  console.log(Object.keys(yearData))
+
+  const crimesMonthByTheft = [];
+  const crimesMonthByBattery = [];
+  const crimesMonthByCriminalDamage = [];
+  const crimesMonthByNarcotics = [];
+  const crimesMonthByAssault = [];
+
+  if (yearData && yearData.hasOwnProperty('THEFT')) {
+    const monthsData = yearData['THEFT'];
+    for (const month in monthsData) {
+      crimesMonthByTheft.push(monthsData[month]);
+    }
+  }
+
+  if (yearData && yearData.hasOwnProperty('BATTERY')) {
+    const monthsData = yearData['BATTERY'];
+    for (const month in monthsData) {
+      crimesMonthByBattery.push(monthsData[month]);
+    }
+  }
+
+  if (yearData && yearData.hasOwnProperty('CRIMINAL DAMAGE')) {
+    const monthsData = yearData['CRIMINAL DAMAGE'];
+    for (const month in monthsData) {
+      crimesMonthByCriminalDamage.push(monthsData[month]);
+    }
+  }
+
+  if (yearData && yearData.hasOwnProperty('NARCOTICS')) {
+    const monthsData = yearData['NARCOTICS'];
+    for (const month in monthsData) {
+      crimesMonthByNarcotics.push(monthsData[month]);
+    }
+  }
+
+
+  if (yearData && yearData.hasOwnProperty('ASSAULT')) {
+    const monthsData = yearData['ASSAULT'];
+    for (const month in monthsData) {
+      crimesMonthByAssault.push(monthsData[month]);
+    }
+  }
+
+  console.log(crimesMonthByTheft);
+  console.log(crimesMonthByAssault);
+  console.log(crimesMonthByNarcotics);
+  console.log(crimesMonthByCriminalDamage);
+  console.log(crimesMonthByBattery);
+ 
+  const allMoonths = ["January", "February","April" ,"May", "June", "July", "August","September","October","November","December"];
+
+  new Chart(document.getElementById("line-chart-crime-months"), {
+    type: 'line',
+    data: {
+      labels: allMoonths,
+      datasets: [{ 
+          data: crimesMonthByTheft,
+          label: "THEFT",
+          borderColor: "#3e95cd",
+          fill: false
+        }, { 
+          data: crimesMonthByBattery,
+          label: "BATTERY",
+          borderColor: "#8e5ea2",
+          fill: false
+        }, { 
+          data: crimesMonthByCriminalDamage,
+          label: "CRIMINAL DAMAGE",
+          borderColor: "#3cba9f",
+          fill: false
+        }, { 
+          data: crimesMonthByNarcotics,
+          label: "NARCOTICS",
+          borderColor: "#e8c3b9",
+          fill: false
+        }, { 
+          data: crimesMonthByAssault,
+          label: "ASSAULT",
+          borderColor: "#c45850",
+          fill: false
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'World population per region (in millions)'
+      }
+    }
+  });
+
+
+}
+
+
+
+
 export{
   drawTotalCrimeTimeSeries,
-  drawTotalCrimeByTypesTimeSeries
+  drawTotalCrimeByTypesTimeSeries,
+  drawCrimeMonthByTypes
+  
 }
