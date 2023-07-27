@@ -4,9 +4,9 @@ import
 {getTotalCrimesByBeat, getTotalCrimesByCommunityArea, getTotalCrimesByWard, getTotalCrimesByDistrict, sortObjectEntries} 
 from './functions.js';
 
-import { drawTotalCrimeTimeSeries } from './Time Series/drawLine.js';
+import { drawTotalCrimeTimeSeries,drawTotalCrimeByTypesTimeSeries } from './Time Series/drawLine.js';
 
-import { countCrimesPerYear } from './Time Series/functionsTimeSeries.js';
+import { countCrimesPerYear, countCrimesPerYearBySpecificCrime } from './Time Series/functionsTimeSeries.js';
 
 const btnChicagoMap = document.querySelector('#btnChicagoMap');
 console.log(btnChicagoMap);
@@ -16,6 +16,8 @@ async function showMapChicago (){
   
     try {
         const dataChicago = await fetchDataChicago();
+
+        console.log(dataChicago);
         
         // console.log(`Data Chicago ${JSON.stringify(dataChicago,null,2)}`);
         // console.log(`Cantidad de datos: `, dataChicago.length);
@@ -38,15 +40,15 @@ async function showMapChicago (){
 
         // console.log(chicagoCrimeWard);
 
-        console.log("DATA FOR WORK");
-        chicagoCrimeBeat = getTotalCrimesByBeat(dataChicagoYear);
-        console.log(`Chicago crime beat ${JSON.stringify(chicagoCrimeBeat,null,2)}`);
-        chicagoCrimeWard = getTotalCrimesByWard(dataChicagoYear);
-        console.log(`Chicago crime Wardt ${JSON.stringify(chicagoCrimeWard,null,2)}`);
-        chicagoCrimeDistrict = getTotalCrimesByDistrict(dataChicagoYear);
-        console.log(`Chicago crime District ${JSON.stringify(chicagoCrimeDistrict,null,2)}`);
-        chicagoCrimeCommunityArea = getTotalCrimesByCommunityArea(dataChicagoYear);
-        console.log(`Chicago crime CommunityArea ${JSON.stringify(chicagoCrimeCommunityArea,null,2)}`);
+        // console.log("DATA FOR WORK");
+        // chicagoCrimeBeat = getTotalCrimesByBeat(dataChicagoYear);
+        // console.log(`Chicago crime beat ${JSON.stringify(chicagoCrimeBeat,null,2)}`);
+        // chicagoCrimeWard = getTotalCrimesByWard(dataChicagoYear);
+        // console.log(`Chicago crime Wardt ${JSON.stringify(chicagoCrimeWard,null,2)}`);
+        // chicagoCrimeDistrict = getTotalCrimesByDistrict(dataChicagoYear);
+        // console.log(`Chicago crime District ${JSON.stringify(chicagoCrimeDistrict,null,2)}`);
+        // chicagoCrimeCommunityArea = getTotalCrimesByCommunityArea(dataChicagoYear);
+        // console.log(`Chicago crime CommunityArea ${JSON.stringify(chicagoCrimeCommunityArea,null,2)}`);
 
 
         // const objSorted = sortObjectEntries(chicagoCrimeCommunityArea)
@@ -92,9 +94,11 @@ async function showMapChicago (){
 
         drawTotalCrimeTimeSeries(totalCrimeAllYears);
 
+        const totalCrimeByTypes = countCrimesPerYearBySpecificCrime(dataChicago);
 
+        drawTotalCrimeByTypesTimeSeries(totalCrimeByTypes);
 
-        const currTotalCrimeByYear = Object.entries(totalCrimeAllYears)
+        console.log(totalCrimeByTypes);
         // console.log(Object.values(currTotalCrimeByYear[0][1]));
         // console.log(currTotalCrimeByYear[1]);
 

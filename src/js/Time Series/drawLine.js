@@ -111,7 +111,94 @@ function drawTotalCrimeTimeSeries(totalCrimeAllYears){
   })();
 
 }
-  
+
+function drawTotalCrimeByTypesTimeSeries(totalCrimeByTypes){
+
+  const allYears = Object.keys(totalCrimeByTypes);
+  const allYearsInt = allYears.map(Number);
+
+  // Object.values(totalCrimeByTypes).forEach(currCrimesByType=>{
+    
+  //   console.log(currCrimesByType)
+  //   console.log(Object.values(currCrimesByType));
+  //   const currVal = currCrimesByType.hasOwnProperty('THEFT') ? Object.values(currCrimesByType) : 0;
+  //   console.log(currVal);
+  //   // totalCrimeByYear.push(Object.values(currCrimesByType));
+  // })
+
+  // ["THEFT", "BATTERY", "CRIMINAL DAMAGE", "NARCOTICS", "ASSAULT"]
+
+  const crimesByTheft = [];
+  const crimesByBattery = [];
+  const crimesByCriminalDamage = [];
+  const crimesByNarcotics = [];
+  const crimesByAssault = [];
+
+  Object.keys(totalCrimeByTypes).forEach(year => {
+    const yearData = totalCrimeByTypes[year];
+
+    const valueTheft = yearData.hasOwnProperty('THEFT') ? yearData['THEFT'] : 0;
+    const valueBattery = yearData.hasOwnProperty('BATTERY') ? yearData['BATTERY'] : 0;
+    const valueCriminalDamage= yearData.hasOwnProperty('CRIMINAL DAMAGE') ? yearData['CRIMINAL DAMAGE'] : 0;
+    const valueNarcotics = yearData.hasOwnProperty('NARCOTICS') ? yearData['NARCOTICS'] : 0;
+    const valueAssault = yearData.hasOwnProperty('ASSAULT') ? yearData['ASSAULT'] : 0;
+    crimesByTheft.push(valueTheft);
+    crimesByBattery.push(valueBattery);
+    crimesByCriminalDamage.push(valueCriminalDamage);
+    crimesByNarcotics.push(valueNarcotics);
+    crimesByAssault.push(valueAssault);
+  });
+  console.log(crimesByTheft)
+  console.log(crimesByBattery)
+  console.log(crimesByCriminalDamage)
+  console.log(crimesByNarcotics)
+  console.log(crimesByAssault)
+
+  new Chart(document.getElementById("line-chart-crime-types"), {
+    type: 'line',
+    data: {
+      labels: allYearsInt,
+      datasets: [{ 
+          data: crimesByTheft,
+          label: "THEFT",
+          borderColor: "#3e95cd",
+          fill: false
+        }, { 
+          data: crimesByBattery,
+          label: "BATTERY",
+          borderColor: "#8e5ea2",
+          fill: false
+        }, { 
+          data: crimesByCriminalDamage,
+          label: "CRIMINAL DAMAGE",
+          borderColor: "#3cba9f",
+          fill: false
+        }, { 
+          data: crimesByNarcotics,
+          label: "NARCOTICS",
+          borderColor: "#e8c3b9",
+          fill: false
+        }, { 
+          data: crimesByAssault,
+          label: "ASSAULT",
+          borderColor: "#c45850",
+          fill: false
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'World population per region (in millions)'
+      }
+    }
+  });
+
+
+}
+
+
 export{
-  drawTotalCrimeTimeSeries
+  drawTotalCrimeTimeSeries,
+  drawTotalCrimeByTypesTimeSeries
 }
