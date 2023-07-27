@@ -5,15 +5,15 @@ function getTotalCrimesByBeat (data) {
     const result = {};
     data.forEach(currCrime => {   
       const {primary_type, beat} = currCrime;
-      
-      if (!result[beat]) {
-        result[beat] = {};
+      const num = parseInt(beat);
+      if (!result[num]) {
+        result[num] = {};
       }
       
-      if (!result[beat][primary_type]) {
-        result[beat][primary_type] = 1;
+      if (!result[num][primary_type]) {
+        result[num][primary_type] = 1;
       } else {
-        result[beat][primary_type]++;
+        result[num][primary_type]++;
       }
     });
     // console.log(result);
@@ -25,15 +25,15 @@ function getTotalCrimesByWard (data) {
     const result = {};
     data.forEach(currCrime => {   
       const {primary_type, ward} = currCrime;
-      
-      if (!result[ward]) {
-        result[ward] = {};
+      const num = parseInt(ward);
+      if (!result[num]) {
+        result[num] = {};
       }
       
-      if (!result[ward][primary_type]) {
-        result[ward][primary_type] = 1;
+      if (!result[num][primary_type]) {
+        result[num][primary_type] = 1;
       } else {
-        result[ward][primary_type]++;
+        result[num][primary_type]++;
       }
     });
     // console.log(result);
@@ -44,15 +44,16 @@ function getTotalCrimesByDistrict (data) {
     const result = {};
     data.forEach(currCrime => {   
       const {primary_type, district} = currCrime;
+      const num = parseInt(district);
       
-      if (!result[district]) {
-        result[district] = {};
+      if (!result[num]) {
+        result[num] = {};
       }
       
-      if (!result[district][primary_type]) {
-        result[district][primary_type] = 1;
+      if (!result[num][primary_type]) {
+        result[num][primary_type] = 1;
       } else {
-        result[district][primary_type]++;
+        result[num][primary_type]++;
       }
     });
     // console.log(result);
@@ -61,17 +62,17 @@ function getTotalCrimesByDistrict (data) {
 
 function getTotalCrimesByCommunityArea (data) {
     const result = {};
-    data.forEach(currCrime => {   
+    data.forEach(currCrime => {
       const {primary_type, community_area} = currCrime;
-      
-      if (!result[community_area]) {
-        result[community_area] = {};
+      const num = parseInt(community_area)
+      if (!result[num]) {
+        result[num] = {};
       }
       
-      if (!result[community_area][primary_type]) {
-        result[community_area][primary_type] = 1;
+      if (!result[num][primary_type]) {
+        result[num][primary_type] = 1;
       } else {
-        result[community_area][primary_type]++;
+        result[num][primary_type]++;
       }
     });
     // console.log(result);

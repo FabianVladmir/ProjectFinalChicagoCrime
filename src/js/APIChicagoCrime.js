@@ -9,7 +9,7 @@ export async function fetchDataChicago () {
         }
       });
       // window.location.href = 'mapCrime.html';
-      console.log(typeof response);
+      // console.log(typeof response);
       return response;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -24,12 +24,12 @@ export async function fetchDataChicagoByYear (year) {
       url: `https://data.cityofchicago.org/resource/ijzp-q8t2.json?year=${setYear}`,
       type: "GET",
       data: {
-        "$limit": 500,
+        "$limit": 5000,
         "$$app_token": "3cJyRnxM0CrRL3CRjJONj4Xez"
       }
     });
     // window.location.href = 'mapCrime.html';
-    console.log(typeof response);
+    // console.log(typeof response);
     return response;
   } catch (error) {
     console.error("Error fetching data:", error);
