@@ -1,4 +1,6 @@
 import { Chart } from "chart.js/auto";
+import { orderObjectByMonth } from "./helpers/functionsDraw";
+
 function drawTotalCrimeTimeSeries(totalCrimeAllYears){
   const allYears = Object.keys(totalCrimeAllYears); //2001 ...
   const totalCrimeByYear = [];
@@ -13,10 +15,10 @@ function drawTotalCrimeTimeSeries(totalCrimeAllYears){
   const allYearsInt = allYears.map(Number);
   const totalCrimeByYearInt = totalCrimeByYear.map(Number);
   // console.log(labelnn);
-  console.log(allYears);
-  console.log(allYearsInt);
-  console.log(totalCrimeByYear);
-  console.log(totalCrimeByYearInt);
+  // console.log(allYears);
+  // console.log(allYearsInt);
+  // console.log(totalCrimeByYear);
+  // console.log(totalCrimeByYearInt);
   
   new Chart(document.getElementById("line-chart-crime"),{
     type: 'line',
@@ -194,7 +196,6 @@ function drawTotalCrimeByTypesTimeSeries(totalCrimeByTypes){
     }
   });
 
-
 }
 
 
@@ -203,9 +204,8 @@ function drawCrimeMonthByTypes(crimeMonthsByTypes, year){
     return null; // Return null if the year does not exist in the data
   }
 
-  console.log(Object.keys(crimeMonthsByTypes))
-  const yearData = crimeMonthsByTypes[year];
-  console.log(Object.keys(yearData))
+  // console.log(Object.keys(crimeMonthsByTypes)) 2001 2002 ...
+  const yearData = crimeMonthsByTypes[year];  
 
   const crimesMonthByTheft = [];
   const crimesMonthByBattery = [];
@@ -213,47 +213,75 @@ function drawCrimeMonthByTypes(crimeMonthsByTypes, year){
   const crimesMonthByNarcotics = [];
   const crimesMonthByAssault = [];
 
-  if (yearData && yearData.hasOwnProperty('THEFT')) {
-    const monthsData = yearData['THEFT'];
-    for (const month in monthsData) {
-      crimesMonthByTheft.push(monthsData[month]);
-    }
-  }
+  const yearDataName = Object.keys(yearData);
 
-  if (yearData && yearData.hasOwnProperty('BATTERY')) {
-    const monthsData = yearData['BATTERY'];
-    for (const month in monthsData) {
-      crimesMonthByBattery.push(monthsData[month]);
-    }
-  }
+  const crimesMonthsByTypes = {};
 
-  if (yearData && yearData.hasOwnProperty('CRIMINAL DAMAGE')) {
-    const monthsData = yearData['CRIMINAL DAMAGE'];
-    for (const month in monthsData) {
-      crimesMonthByCriminalDamage.push(monthsData[month]);
-    }
-  }
+  yearDataName.forEach(objName => {
+    crimesMonthsByTypes[objName] = [];
+  });
 
-  if (yearData && yearData.hasOwnProperty('NARCOTICS')) {
-    const monthsData = yearData['NARCOTICS'];
-    for (const month in monthsData) {
-      crimesMonthByNarcotics.push(monthsData[month]);
-    }
-  }
+  yearDataName.forEach(objName => {
+    const currObj = yearData[objName];
+    const currObjOrder = orderObjectByMonth(currObj);    
+    
+    Object.values(currObjOrder).forEach(valuesMonth => {
+      // console.log(valuesMonth);
+      // const valuesMonthOrder = orderObjectByMonth(valuesMonth);
+      crimesMonthsByTypes[objName].push(valuesMonth);
+    })
+  });
+
+  console.log(crimesMonthsByTypes);
+  
+  const valuescrimesTheft = crimesMonthsByTypes['THEFT'];
+  const valuescrimesBattery = crimesMonthsByTypes['BATTERY'];
+  const valuescrimesCriminalDamage = crimesMonthsByTypes['CRIMINAL DAMAGE'];
+  const valuescrimesNarcotics = crimesMonthsByTypes['NARCOTICS'];
+  const valuescrimesAssault = crimesMonthsByTypes['ASSAULT'];
+  
+  crimesMonthByTheft.push(valuescrimesTheft);
+  crimesMonthByBattery.push(valuescrimesBattery);
+  crimesMonthByCriminalDamage.push(valuescrimesCriminalDamage);
+  crimesMonthByNarcotics.push(valuescrimesNarcotics);
+  crimesMonthByAssault.push(valuescrimesAssault);
+  
+  
+
+  // if (yearData && yearData.hasOwnProperty('BATTERY')) {
+  //   const monthsData = yearData['BATTERY'];
+  //   for (const month in monthsData) {
+  //     crimesMonthByBattery.push(monthsData[month]);
+  //   }
+  // }
+
+  // if (yearData && yearData.hasOwnProperty('CRIMINAL DAMAGE')) {
+  //   const monthsData = yearData['CRIMINAL DAMAGE'];
+  //   for (const month in monthsData) {
+  //     crimesMonthByCriminalDamage.push(monthsData[month]);
+  //   }
+  // }
+
+  // if (yearData && yearData.hasOwnProperty('NARCOTICS')) {
+  //   const monthsData = yearData['NARCOTICS'];
+  //   for (const month in monthsData) {
+  //     crimesMonthByNarcotics.push(monthsData[month]);
+  //   }
+  // }
 
 
-  if (yearData && yearData.hasOwnProperty('ASSAULT')) {
-    const monthsData = yearData['ASSAULT'];
-    for (const month in monthsData) {
-      crimesMonthByAssault.push(monthsData[month]);
-    }
-  }
+  // if (yearData && yearData.hasOwnProperty('ASSAULT')) {
+  //   const monthsData = yearData['ASSAULT'];
+  //   for (const month in monthsData) {
+  //     crimesMonthByAssault.push(monthsData[month]);
+  //   }
+  // }
 
-  console.log(crimesMonthByTheft);
-  console.log(crimesMonthByAssault);
-  console.log(crimesMonthByNarcotics);
-  console.log(crimesMonthByCriminalDamage);
-  console.log(crimesMonthByBattery);
+  console.log(crimesMonthByTheft[0]);
+  console.log(crimesMonthByAssault[0]);
+  console.log(crimesMonthByNarcotics[0]);
+  console.log(crimesMonthByCriminalDamage[0]);
+  console.log(crimesMonthByBattery[0]);
  
   const allMoonths = ["January", "February","April" ,"May", "June", "July", "August","September","October","November","December"];
 
@@ -262,27 +290,27 @@ function drawCrimeMonthByTypes(crimeMonthsByTypes, year){
     data: {
       labels: allMoonths,
       datasets: [{ 
-          data: crimesMonthByTheft,
+          data: crimesMonthByTheft[0],
           label: "THEFT",
           borderColor: "#3e95cd",
           fill: false
         }, { 
-          data: crimesMonthByBattery,
+          data: crimesMonthByBattery[0],
           label: "BATTERY",
           borderColor: "#8e5ea2",
           fill: false
         }, { 
-          data: crimesMonthByCriminalDamage,
+          data: crimesMonthByCriminalDamage[0],
           label: "CRIMINAL DAMAGE",
           borderColor: "#3cba9f",
           fill: false
         }, { 
-          data: crimesMonthByNarcotics,
+          data: crimesMonthByNarcotics[0],
           label: "NARCOTICS",
           borderColor: "#e8c3b9",
           fill: false
         }, { 
-          data: crimesMonthByAssault,
+          data: crimesMonthByAssault[0],
           label: "ASSAULT",
           borderColor: "#c45850",
           fill: false

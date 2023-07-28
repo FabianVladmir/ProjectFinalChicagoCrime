@@ -21,7 +21,7 @@ async function showMapChicago (){
     try {
         const dataChicago = await fetchDataChicago();
 
-        console.log(dataChicago);
+        // console.log(dataChicago);
         
         // console.log(`Data Chicago ${JSON.stringify(dataChicago,null,2)}`);
         // console.log(`Cantidad de datos: `, dataChicago.length);

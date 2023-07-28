@@ -111,7 +111,7 @@ function countCrimesPerMonth(data) {
   const result = {};
 
   // Initialize the result object with the specified structure for each year
-  for (let year = 2002; year <= 2023; year++) {
+  for (let year = 2001; year <= 2023; year++) {
     result[year] = {
       'January': 0,
       'February': 0,
