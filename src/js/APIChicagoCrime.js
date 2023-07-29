@@ -4,7 +4,7 @@ export async function fetchDataChicago () {
         url: "https://data.cityofchicago.org/resource/ijzp-q8t2.json?$where=year > 2001",
         type: "GET",
         data: {
-          "$limit": 25000,
+          "$limit": 50000,
           "$$app_token": "3cJyRnxM0CrRL3CRjJONj4Xez"
         }
       });
@@ -24,7 +24,7 @@ export async function fetchDataChicagoByYear (year) {
       url: `https://data.cityofchicago.org/resource/ijzp-q8t2.json?year=${setYear}`,
       type: "GET",
       data: {
-        "$limit": 10000,
+        "$limit": 25000,
         "$$app_token": "3cJyRnxM0CrRL3CRjJONj4Xez"
       }
     });

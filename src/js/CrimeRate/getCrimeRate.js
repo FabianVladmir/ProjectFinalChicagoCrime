@@ -32,3 +32,34 @@ export async function getCrimeRateByYear(byLocation,byYear){
 
     return chicagoCrimebyLocation;
 }
+
+export async function getCrimeRate(byLocation){
+    try {
+        var dataChicago = await fetchDataChicago();
+    } catch (error) {
+        console.log(error)
+    } finally {
+        console.log(`Cantidad de dato chicago del 2001 al 2023 ${JSON.stringify(dataChicago,null,2)}`);
+    }
+    
+    let chicagoCrimebyLocation = {};
+
+    switch (byLocation) {
+        case "beat":
+            chicagoCrimebyLocation = getTotalCrimesByBeat(dataChicago);
+            break;
+        case "ward":
+            chicagoCrimebyLocation = getTotalCrimesByWard(dataChicago);
+            break;
+        case "district":
+            chicagoCrimebyLocation = getTotalCrimesByDistrict(dataChicago);
+            break;
+        case "community_area":
+            chicagoCrimebyLocation = getTotalCrimesByCommunityArea(dataChicago);
+            break;
+        default:
+            break;
+    }
+
+    return chicagoCrimebyLocation;
+}

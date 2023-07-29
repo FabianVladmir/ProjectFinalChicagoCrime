@@ -19,13 +19,13 @@
   <body>
 
     
-    <svg id="chart" width="600" height="200"></svg>
+    <!-- <svg id="chart" width="600" height="200"></svg> -->
    
     
     <div class="container">
       <div class="mapContainer">
         <select id = "selectMap">
-          <option value="">Seleccione una escala</option>
+          <option value="district">Seleccione una escala</option>
           <option value="beat">by Beats</option>
           <option value="ward">by Wards</option>
           <option value="district">by District</option>
@@ -33,7 +33,7 @@
         </select>
         &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
 
-        <div class="byYear d-flex flex-column">
+        <!-- <div class="byYear d-flex flex-column">
           <div class="d-flex justify-content-end align-items-center">
             <label for="slide">Year Start Rate<span>&emsp;&emsp;</span></label>
             <input id="slide_by_year" type="range" value="2001" min="2001" max="2023" class="form-range">
@@ -41,7 +41,7 @@
           <div class="d-flex justify-content-end align-items-center">
             <span>2001&nbsp;I&thinsp;&nbsp;I&thinsp;&nbsp;I&thinsp;&nbsp;I&thinsp;&nbsp;I&thinsp;&nbsp;I&thinsp;&nbsp;I&thinsp;&nbsp;I&thinsp;2023</span>
           </div>
-        </div>        
+        </div>         -->
 
         <div class="map">
           <div id="tooltip" style="position: absolute; display: none; background-color: #ffffff; padding: 5px;"></div>
@@ -51,18 +51,18 @@
       <div class="row" style="border-radius: 10px; border: 1px solid lightgray; width:100%; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
         
         <form action="main.js" method="">
-          <h3>Chicha Crime</h3>					
+          <h3>Serie Temporal</h3>					
           
           <!-- <a class="btn btn-primary" href="mapCrime.html" role="button">
             <button type="button" class="btn btn-primary" id="btnChicagoMap">Click</button>
           </a> -->
           
-          <button type="button" class="btn btn-primary" id="btnChicagoMap">Click</button>
+          <button type="button" class="btn btn-primary" id="btnChicagoMap" hidden>Click</button>
           
         </form>
       </div>
 
-      <canvas id="line-chart-crime" width="800" height="450"></canvas>
+      <!-- <canvas id="line-chart-crime" width="800" height="450"></canvas> -->
       
       <canvas id="line-chart-crime-types" width="800" height="450"></canvas> 
 

@@ -15,6 +15,15 @@ from './Time Series/functionsTimeSeries.js';
 const btnChicagoMap = document.querySelector('#btnChicagoMap');
 console.log(btnChicagoMap);
 btnChicagoMap.addEventListener('click', showMapChicago);
+// showMapChicago()
+
+(async function __st__() {
+  const dataChicago = await fetchDataChicago();
+  const totalCrimeByTypes = countCrimesPerYearBySpecificCrime(dataChicago);
+
+  drawTotalCrimeByTypesTimeSeries(totalCrimeByTypes);
+  
+})();
 
 async function showMapChicago (){
   
