@@ -9,8 +9,11 @@ import
 from './Time Series/drawLine.js';
 
 import 
-{ countCrimesPerYear, countCrimesPerYearBySpecificCrime,counterCrimePerMounthBySpecificCrime,countCrimesPerMonth } 
+{ countCrimesPerYear, countCrimesPerYearBySpecificCrime,countCrimesPerYearByRegion, counterCrimePerMounthBySpecificCrime,countCrimesPerMonth } 
 from './Time Series/functionsTimeSeries.js';
+
+import {getCrimeRate, getCrimeRateByYear} from "./CrimeRate/getCrimeRate.js"
+
 
 const btnChicagoMap = document.querySelector('#btnChicagoMap');
 console.log(btnChicagoMap);
@@ -19,7 +22,11 @@ btnChicagoMap.addEventListener('click', showMapChicago);
 
 (async function __st__() {
   const dataChicago = await fetchDataChicago();
+  // const totalCrimeByTypes = countCrimesPerYearByRegion(dataChicago,"district");
   const totalCrimeByTypes = countCrimesPerYearBySpecificCrime(dataChicago);
+  // const getCrimeRatebyTotal = await getCrimeRate("district")
+
+  // console.log("getCrimeRatebyTotal", getCrimeRatebyTotal);
 
   drawTotalCrimeByTypesTimeSeries(totalCrimeByTypes);
   

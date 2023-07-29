@@ -176,12 +176,53 @@ function countCrimesPerYearBySpecificCrime(data) {
   return totalCrimesPerYearByType;
 }
 
-  
+
+function countCrimesPerYearByRegion(data,region) {
+  // Initialize an object to store the total crimes per year for each primary type
+  const totalCrimesPerYearByType = {};
+
+  // Specify the primary types of interest
+  const mostFrequentCrimes = ["THEFT", "BATTERY", "CRIMINAL DAMAGE", "NARCOTICS", "ASSAULT"];  
+  console.log(data);
+  // Iterate through each object in the data
+  Object.values(data).forEach(crimeObj => {
+    // const year = parseInt(crimeObj['year']);
+    // const primaryType = crimeObj['primary_type'];
+    const {year, primary_type, district, beat, ward, community_area} = crimeObj;   
+
+    if (region === "district" ) {
+      if (mostFrequentCrimes.includes(primary_type)) {
+        // If the year is not already in the object, add it with the primary type and count of 1
+        if (!totalCrimesPerYearByType.hasOwnProperty(year)) {
+          totalCrimesPerYearByType[year] = { [parseInt(district)]: 1 };
+        //   totalCrimesPerYearByType[year] = { [parseInt(district)]: 1 };
+        //   totalCrimesPerYearByType[year][parseInt(district)] = { [primary_type]: 1 };
+        } 
+        if (!totalCrimesPerYearByType[year].hasOwnProperty(parseInt(district))) {          
+          totalCrimesPerYearByType[year][parseInt(district)] = { [primary_type]: 1 };
+        }
+
+        // If the year is already in the object, increment the count for the primary type by 1
+        // if (!totalCrimesPerYearByType[year][parseInt(district)].hasOwnProperty(primary_type)) {
+        //   totalCrimesPerYearByType[year][parseInt(district)][primary_type] = 1;
+        // } else {
+        //   totalCrimesPerYearByType[year][parseInt(district)][primary_type]++;
+        // }
+      
+      }
+    }
+    // Only consider the primary types of interest
+    
+  });
+  console.log("totalCrimesPerYearByType: ", totalCrimesPerYearByType);
+  return totalCrimesPerYearByType;
+}
 
 export {
     countCrimesPerYear,
     getSpecificCrime,
     countCrimesPerMonth,
     countCrimesPerYearBySpecificCrime,
+    countCrimesPerYearByRegion,
     counterCrimePerMounthBySpecificCrime
 }

@@ -115,6 +115,7 @@ function drawTotalCrimeTimeSeries(totalCrimeAllYears){
 }
 
 function drawTotalCrimeByTypesTimeSeries(totalCrimeByTypes){
+  console.log("totalCrimeByTypes: ", totalCrimeByTypes);
 
   const allYears = Object.keys(totalCrimeByTypes);
   const allYearsInt = allYears.map(Number);

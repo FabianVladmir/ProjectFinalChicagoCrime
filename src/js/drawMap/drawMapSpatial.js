@@ -7,6 +7,8 @@ var svg = d3.select(".map")
             .append("svg")
             .attr('width', 1400)
             .attr('height', 550)
+            .attr('transform', `translate(${400}, ${0})`) // Centrar el svg
+
 
 //** By Coordinates */
 const onChangeSelect = async (event) => {
@@ -237,8 +239,10 @@ async function drawMapGeneral(boundariesCurrent) {
           }
   
           tooltip
-            .style("left", xPosition+80 + "px")
-            .style("top", yPosition+270 + "px")
+            // .style("left", xPosition+80 + "px")
+            // .style("top", yPosition+270 + "px")
+            .style("left",10 + "px")
+            .style("top", 1 + "px")
             .style("display", "block")
             .style("width", "300px")
             // .text("Numero de Localidad: " + numLocal + ": "+ content);
@@ -461,10 +465,12 @@ async function drawMap(boundariesCurrent,byYear){
               sumTotal += element;
             }
           }
+          xPosition = xPosition/2
+          yPosition = yPosition/2
 
           tooltip
-            .style("left", xPosition+80 + "px")
-            .style("top", yPosition+270 + "px")
+            .style("left", xPosition + "px")
+            .style("top", yPosition + "px")
             .style("display", "block")
             .style("width", "300px")
             // .text("Numero de Localidad: " + numLocal + ": "+ content);
