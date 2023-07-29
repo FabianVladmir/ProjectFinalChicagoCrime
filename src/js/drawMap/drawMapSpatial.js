@@ -26,9 +26,12 @@ async function onChangeSelectByYear(event) {
 const slideChicagoMap = document.querySelector('#slide_by_year');
 slideChicagoMap.addEventListener('change', onChangeSelectByYear);
 
+//** Color */
+const interpolateColor = d3.interpolateRgb("#FFEECC", "#C51605");
+
 //** plot Map */
 async function drawMap(boundariesCurrent,byYear){
-    // await getMap(boundariesCurrent)
+  // await getMap(boundariesCurrent)
   if (boundariesCurrent === "") {
     alert("Por favor seleccione una escala");  
     return;
@@ -52,17 +55,16 @@ async function drawMap(boundariesCurrent,byYear){
 
   /** COORDINATES */
   const {features} = currData;
-  // console.log("datos : ",features);
+  console.log("datos : ",features);
   // console.log("datos : ",typeof features);
   const coordinatesList = features.map((element)=>{
     const {geometry: {coordinates}, properties} = element ?? {};
-    console.log("Properties: ", properties);
+    // console.log("Properties: ", properties);
     return coordinates;
   });
   
   const maxMinXY = coordinatesList.reduce((accumulator, currentValue) => {
-    
-  currentValue.forEach(element => {
+    currentValue.forEach(element => {
       element.forEach(coordinates => {
         coordinates.forEach(value => {
           if (value[0] > accumulator?.X[1]){
@@ -128,31 +130,43 @@ async function drawMap(boundariesCurrent,byYear){
   } catch (error) {
     console.error(error);
   } finally {
-    console.log("Tasa de crimen por: ", boundariesCurrent, " y ", byYear,rateCrime);
-    console.log("Por locacion en: ", locationList);
+    console.log("Tasa de crimen por: ", boundariesCurrent, " y ", byYear,rateCrime );
+    
+    // datos de  location list del features
+    locationList = locationList.map((value) => parseInt(value));
+    console.log("Por location por features en: ", locationList);
   }
 
   // percent by Location
   let percentByLocation = [];
+  let nameByLocation = []
+
   let sumTotal = 0;
   for (const key in rateCrime) {
     const values = Object.values(rateCrime[key]);
     const percent = values.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     percentByLocation.push(percent);
+    nameByLocation.push(parseInt(key))
     sumTotal+=percent;
   }
   console.log(percentByLocation);
+  console.log(nameByLocation);
   // percentByLocation = percentByLocation.map(percent => 1/percent);
 
   //normalization
-  percentByLocation = percentByLocation.map(function(value) {
-    return (1 / value)*100;
-  });
-  
+  percentByLocation = percentByLocation.map(value => value / sumTotal);
+  // Definir el dominio y rango para el escalamiento lineal
+  var domain = [0, 1]; // Rango de valores normalizados [0, 1]
+  var range = [0, 1]; // Rango de valores para la interpolación [0, 1]
+
+  var scale = d3.scaleLinear().domain(domain).range(range);
+
   console.log(percentByLocation);
   
   //each boundaries
   for (var i = 0; i < coordinatesList.length; i++) {
+    // console.log("INDICES LIST: ", locationList[i]);
+    // console.log("INDICES NAME: ", nameByLocation[i]);
     //some boundaries contain more coordinates for example 3 beats belong to a district
     for (var j = 0; j < coordinatesList[i].length; j++){
       //total of polygon
@@ -164,8 +178,27 @@ async function drawMap(boundariesCurrent,byYear){
             }).join(" ");
         })
         .attr('stroke-width', 1.5)
-        // .attr("fill", 'rgb('+ (212 * percentByLocation[i]) +',' + (173 * percentByLocation[i]) + ','+ (252 * percentByLocation[i]) +')')
-        .attr("fill", 'rgb(0,' + (255 * percentByLocation[i]) + ',0)')
+        .attr("fill", function (d) {
+          const idx = nameByLocation.indexOf(locationList[i]);
+          // console.log(locationList[i]);
+          // console.log(idx);
+          // console.log(interpolateColor(scale(percentByLocation[idx]*10)));
+          // console.log(percentByLocation[idx]);
+          // console.log(locationList[i]);
+          if (idx == -1) {
+            console.log("no existe");
+            return interpolateColor(scale(0*10));
+          }
+          if (boundariesCurrent === "district")
+            return interpolateColor(scale(percentByLocation[idx]*10));          
+          if (boundariesCurrent === "ward")
+            return interpolateColor(scale(percentByLocation[idx]*1000));
+          if (boundariesCurrent === "beat")
+            return interpolateColor(scale(percentByLocation[idx]*100));
+          if (boundariesCurrent === "community_area")
+            return interpolateColor(scale(percentByLocation[idx]*100));
+        })
+        // .attr("fill", 'rgb(0,' + (255 * percentByLocation[i]) + ',0)')
         .attr("subLocation", locationList[i])
         // .attr("fill", '#D0D0D0')
         
