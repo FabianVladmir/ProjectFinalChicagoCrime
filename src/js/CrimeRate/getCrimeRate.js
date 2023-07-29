@@ -63,3 +63,15 @@ export async function getCrimeRate(byLocation){
 
     return chicagoCrimebyLocation;
 }
+
+
+export async function getDataTotal(){
+    try {
+        var dataChicago = await fetchDataChicago();
+    } catch (error) {
+        console.log(error)
+    } finally {
+        console.log(`Cantidad de dato chicago del 2001 al 2023 ${JSON.stringify(dataChicago,null,2)}`);
+    }
+    return dataChicago;
+}

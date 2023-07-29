@@ -22,13 +22,11 @@ btnChicagoMap.addEventListener('click', showMapChicago);
 
 (async function __st__() {
   const dataChicago = await fetchDataChicago();
-  // const totalCrimeByTypes = countCrimesPerYearByRegion(dataChicago,"district");
   
-  const totalCrimeAllYears = countCrimesPerYear(dataChicago);
-
-  // console.log(totalCrimeAllYears);
-
-  drawTotalCrimeTimeSeries(totalCrimeAllYears);
+  // const totalCrimeAllYears = countCrimesPerYear(dataChicago);
+  // // console.log(totalCrimeAllYears);
+  
+  // drawTotalCrimeTimeSeries(totalCrimeAllYears);
   const totalCrimeByTypes = countCrimesPerYearBySpecificCrime(dataChicago);
   // const getCrimeRatebyTotal = await getCrimeRate("district")
 

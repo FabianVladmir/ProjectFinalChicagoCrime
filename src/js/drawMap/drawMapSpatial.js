@@ -1,6 +1,15 @@
 import * as d3 from "d3";
 import name_value from "./listLocations";
-import {getCrimeRate, getCrimeRateByYear} from "../CrimeRate/getCrimeRate"
+import {getCrimeRate, getCrimeRateByYear, getDataTotal} from "../CrimeRate/getCrimeRate"
+
+import 
+{ countCrimesPerYear, countCrimesPerYearBySpecificCrime,countCrimesPerYearByRegion, counterCrimePerMounthBySpecificCrime,countCrimesPerMonth } 
+from '../Time Series/functionsTimeSeries';
+
+import 
+{ drawTotalCrimeTimeSeries,drawTotalCrimeByTypesTimeSeries,drawTotalCrimeTypesByRegionTimeSeries,drawCrimeMonthByTypes } 
+from '../Time Series/drawLine';
+
 
 //** d3 */
 var svg = d3.select(".map")
@@ -218,7 +227,7 @@ async function drawMapGeneral(boundariesCurrent) {
         //   d3.select(this).attr("fill", originalColor)
   
         // })
-        .on("click", function () {
+        .on("click",async function () {
           let coordinates = d3.select(this).data()[0];
           // console.log(coordinates);
           let centroid = d3.polygonCentroid(coordinates);
@@ -252,6 +261,13 @@ async function drawMapGeneral(boundariesCurrent) {
           setTimeout(function () {
             tooltip.style("display", "none");
           }, 8000);
+
+          /** invocar la serie temporal */
+          const dataChicago = await getDataTotal(); 
+          const totalCrimeTypeByRegion = countCrimesPerYearByRegion(dataChicago,boundariesCurrent);
+          drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal);
+  
+  
         });
         
       }

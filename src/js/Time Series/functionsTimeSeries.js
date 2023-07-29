@@ -190,31 +190,38 @@ function countCrimesPerYearByRegion(data,region) {
     // const primaryType = crimeObj['primary_type'];
     const {year, primary_type, district, beat, ward, community_area} = crimeObj;   
 
+    // console.log("data crime: ", year,primary_type,district);
     if (region === "district" ) {
       if (mostFrequentCrimes.includes(primary_type)) {
         // If the year is not already in the object, add it with the primary type and count of 1
         if (!totalCrimesPerYearByType.hasOwnProperty(year)) {
-          totalCrimesPerYearByType[year] = { [parseInt(district)]: 1 };
-        //   totalCrimesPerYearByType[year] = { [parseInt(district)]: 1 };
-        //   totalCrimesPerYearByType[year][parseInt(district)] = { [primary_type]: 1 };
-        } 
-        if (!totalCrimesPerYearByType[year].hasOwnProperty(parseInt(district))) {          
-          totalCrimesPerYearByType[year][parseInt(district)] = { [primary_type]: 1 };
-        }
-
-        // If the year is already in the object, increment the count for the primary type by 1
-        // if (!totalCrimesPerYearByType[year][parseInt(district)].hasOwnProperty(primary_type)) {
-        //   totalCrimesPerYearByType[year][parseInt(district)][primary_type] = 1;
-        // } else {
-        //   totalCrimesPerYearByType[year][parseInt(district)][primary_type]++;
-        // }
-      
+          totalCrimesPerYearByType[year] = { [parseInt(district)]: "" };
+          totalCrimesPerYearByType[year][parseInt(district)] = {[primary_type]: 1}
+        
+          // if (parseInt(year) == 2018) {
+          //   console.log(parseInt(district));
+          //   console.log(primary_type); 
+          // }
+        }else{
+          // if (parseInt(year) == 2018 && parseInt(district) == 1) {
+          //   console.log("tiene los delitos: ",primary_type); 
+          // }
+          if (!totalCrimesPerYearByType[year].hasOwnProperty(parseInt(district))) {    
+            totalCrimesPerYearByType[year][parseInt(district)] = { [primary_type]: 1 };
+          }else{
+            if (!totalCrimesPerYearByType[year][parseInt(district)].hasOwnProperty(primary_type)) {
+              totalCrimesPerYearByType[year][parseInt(district)][primary_type] = 1;
+            } else {
+              totalCrimesPerYearByType[year][parseInt(district)][primary_type]++;
+            } 
+          }
+        }      
       }
     }
     // Only consider the primary types of interest
     
   });
-  console.log("totalCrimesPerYearByType: ", totalCrimesPerYearByType);
+  // console.log("totalCrimesPerYearByType: ", totalCrimesPerYearByType);
   return totalCrimesPerYearByType;
 }
 

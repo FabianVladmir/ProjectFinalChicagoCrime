@@ -1,6 +1,6 @@
 import { Chart } from "chart.js/auto";
 import { orderObjectByMonth } from "./helpers/functionsDraw";
-
+var charSerieTTime = null
 function drawTotalCrimeTimeSeries(totalCrimeAllYears){
   const allYears = Object.keys(totalCrimeAllYears); //2001 ...
   const totalCrimeByYear = [];
@@ -157,7 +157,103 @@ function drawTotalCrimeByTypesTimeSeries(totalCrimeByTypes){
   // console.log(crimesByNarcotics)
   // console.log(crimesByAssault)
 
-  new Chart(document.getElementById("line-chart-crime-types"), {
+  charSerieTTime = new Chart(document.getElementById("line-chart-crime-types"), {
+    type: 'line',
+    data: {
+      labels: allYearsInt,
+      datasets: [{ 
+          data: crimesByTheft,
+          label: "THEFT",
+          borderColor: "#3e95cd",
+          fill: false
+        }, { 
+          data: crimesByBattery,
+          label: "BATTERY",
+          borderColor: "#8e5ea2",
+          fill: false
+        }, { 
+          data: crimesByCriminalDamage,
+          label: "CRIMINAL DAMAGE",
+          borderColor: "#3cba9f",
+          fill: false
+        }, { 
+          data: crimesByNarcotics,
+          label: "NARCOTICS",
+          borderColor: "#e8c3b9",
+          fill: false
+        }, { 
+          data: crimesByAssault,
+          label: "ASSAULT",
+          borderColor: "#c45850",
+          fill: false
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'World population per region (in millions)'
+      }
+    }
+  });
+
+}
+
+
+function drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal){
+  console.log("totalCrimeTypeByRegion: ", totalCrimeTypeByRegion,numLocal);
+
+  const allYears = Object.keys(totalCrimeTypeByRegion);
+  const allYearsInt = allYears.map(Number);
+
+
+  const crimesByTheft = [];
+  const crimesByBattery = [];
+  const crimesByCriminalDamage = [];
+  const crimesByNarcotics = [];
+  const crimesByAssault = [];
+
+  Object.keys(totalCrimeTypeByRegion).forEach(year => {
+    const yearData = totalCrimeTypeByRegion[year];
+
+    if (yearData.hasOwnProperty(numLocal)) {
+      const valueTheft = yearData[numLocal].hasOwnProperty('THEFT') ? yearData[numLocal]['THEFT'] : 0;
+      const valueBattery = yearData[numLocal].hasOwnProperty('BATTERY') ? yearData[numLocal]['BATTERY'] : 0;
+      const valueCriminalDamage= yearData[numLocal].hasOwnProperty('CRIMINAL DAMAGE') ? yearData[numLocal]['CRIMINAL DAMAGE'] : 0;
+      const valueNarcotics = yearData[numLocal].hasOwnProperty('NARCOTICS') ? yearData[numLocal]['NARCOTICS'] : 0;
+      const valueAssault = yearData[numLocal].hasOwnProperty('ASSAULT') ? yearData[numLocal]['ASSAULT'] : 0;
+      
+      crimesByTheft.push(valueTheft);
+      crimesByBattery.push(valueBattery);
+      crimesByCriminalDamage.push(valueCriminalDamage);
+      crimesByNarcotics.push(valueNarcotics);
+      crimesByAssault.push(valueAssault);
+    }else{
+      const valueTheft = 0;
+      const valueBattery = 0;
+      const valueCriminalDamage= 0;
+      const valueNarcotics = 0;
+      const valueAssault = 0;
+      
+      crimesByTheft.push(valueTheft);
+      crimesByBattery.push(valueBattery);
+      crimesByCriminalDamage.push(valueCriminalDamage);
+      crimesByNarcotics.push(valueNarcotics);
+      crimesByAssault.push(valueAssault);
+      
+    }
+    
+    
+  });
+  // console.log(crimesByTheft)
+  // console.log(crimesByBattery)
+  // console.log(crimesByCriminalDamage)
+  // console.log(crimesByNarcotics)
+  // console.log(crimesByAssault)
+
+  charSerieTTime.destroy();
+
+  charSerieTTime = new Chart(document.getElementById("line-chart-crime-types"), {
     type: 'line',
     data: {
       labels: allYearsInt,
@@ -335,6 +431,7 @@ function drawCrimeMonthByTypes(crimeMonthsByTypes, year){
 export{
   drawTotalCrimeTimeSeries,
   drawTotalCrimeByTypesTimeSeries,
+  drawTotalCrimeTypesByRegionTimeSeries,
   drawCrimeMonthByTypes
   
 }
