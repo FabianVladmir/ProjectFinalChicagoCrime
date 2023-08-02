@@ -225,6 +225,7 @@ function countCrimesPerYearByRegion(data,region) {
   return totalCrimesPerYearByType;
 }
 
+  
 function extractTotalCrimesPerHour(data) {
   const result = {};
 
@@ -266,8 +267,6 @@ function extractTotalCrimesPerHour(data) {
   console.log(result);
   return result;
 }
-
-
 
 export {
     countCrimesPerYear,
