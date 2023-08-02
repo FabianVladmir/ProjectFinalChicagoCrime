@@ -183,23 +183,15 @@ function extractTotalCrimesPerHour(data) {
   // Loop through each object in data
   for (const key in data) {
     if (data.hasOwnProperty(key)) {
-      const obj = data[key];
-      const year = obj.year;
-      const date = new Date(obj.date);
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      const hour = date.getHours();
+      const { year, date } = data[key];
+      const month = new Date(date).getMonth() + 1;
+      const day = new Date(date).getDate();
+      const hour = new Date(date).getHours();
 
       // Create the structure for each year, month, and day if not present
-      if (!result[year]) {
-        result[year] = {};
-      }
-      if (!result[year][month]) {
-        result[year][month] = {};
-      }
-      if (!result[year][month][day]) {
-        result[year][month][day] = {};
-      }
+      result[year] = result[year] || {};
+      result[year][month] = result[year][month] || {};
+      result[year][month][day] = result[year][month][day] || {};
 
       // Calculate the total number of crimes for the specific hour
       const keyName = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${String(hour).padStart(2, '0')}:00:00`;
