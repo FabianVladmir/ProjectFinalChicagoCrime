@@ -225,11 +225,56 @@ function countCrimesPerYearByRegion(data,region) {
   return totalCrimesPerYearByType;
 }
 
+function extractTotalCrimesPerHour(data) {
+  const result = {};
+
+  // Loop through each object in data
+  for (const key in data) {
+    if (data.hasOwnProperty(key)) {
+      const obj = data[key];
+      const year = obj.year;
+      const date = new Date(obj.date);
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hour = date.getHours();
+
+      // Create the structure for each year, month, and day if not present
+      if (!result[year]) {
+        result[year] = {};
+      }
+      if (!result[year][month]) {
+        result[year][month] = {};
+      }
+      if (!result[year][month][day]) {
+        result[year][month][day] = {};
+      }
+
+      // Calculate the total number of crimes for the specific hour
+      const keyName = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${String(hour).padStart(2, '0')}:00:00`;
+      if (!result[year][month][day][hour]) {
+        result[year][month][day][hour] = {
+          name: keyName,
+          details: {
+            total_crimes: 1, // Initialize with 1 as we found a crime at this hour
+          },
+        };
+      } else {
+        result[year][month][day][hour].details.total_crimes += 1;
+      }
+    }
+  }
+  console.log(result);
+  return result;
+}
+
+
+
 export {
     countCrimesPerYear,
     getSpecificCrime,
     countCrimesPerMonth,
     countCrimesPerYearBySpecificCrime,
     countCrimesPerYearByRegion,
-    counterCrimePerMounthBySpecificCrime
+    counterCrimePerMounthBySpecificCrime,
+    extractTotalCrimesPerHour
 }
