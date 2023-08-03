@@ -79,14 +79,40 @@ function getTotalCrimesByCommunityArea (data) {
     return result;
 }
 
-function sortObjectEntries(obj, n) {
-   
-    let sortedList = Object.entries(obj).sort((a,  b)=>  {
-        
-        // console.log(a[0]); // indice        
 
-        const objA = a[1];
-        const objB = b[1];  
+
+function sortObjectEntries(data, n) {
+  // Loop through each object in data
+  for (const key in data) {
+    if (data.hasOwnProperty(key)) {
+      // Convert the object into an array of key-value pairs
+      const entries = Object.entries(data[key]);
+
+      // Sort the array based on the values in descending order
+      entries.sort((a, b) => b[1] - a[1]);
+
+      // Create a new object to store the sorted entries up to the limit 'n'
+      const sortedObj = {};
+      for (let i = 0; i < n && i < entries.length; i++) {
+        sortedObj[entries[i][0]] = entries[i][1];
+      }
+
+      // Replace the original object with the sorted one
+      data[key] = sortedObj;
+    }
+  }
+
+  return data;
+}
+
+// function sortObjectEntries(obj, n) {
+   
+//     let sortedList = Object.entries(obj).sort((a,  b)=>  {
+        
+//         // console.log(a[0]); // indice        
+
+//         const objA = a[1];
+//         const objB = b[1];  
         
         // const objeASort = Object.entries(objA).sort((key,value) =>{
         //   // console.log(key);
@@ -98,7 +124,7 @@ function sortObjectEntries(obj, n) {
         // console.log(objeBSort)        
         
         // return Object.values(objB) - Object.values(objA).map(el=>el[0]).slice(0,n);        
-    })
+    // })
 
     // console.log(sortedList);
     
@@ -144,7 +170,7 @@ function sortObjectEntries(obj, n) {
   
     // // Return first n keys from sortedList
     // return sortedList.map(el => el[0]).slice(0, n);
-  }
+  // }
   
 
  
