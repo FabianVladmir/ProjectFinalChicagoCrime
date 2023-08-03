@@ -28,6 +28,8 @@
    
     
     <div class="container">
+      <!-- <canvas id="barChartHorizontal"> </canvas> -->
+
       <div class="mapContainer" style="border-radius: 10px; border: 1px solid lightgray; width:100%; margin-top:1rem; padding:0rem 1rem 1rem 1rem">
         <div class="d-flex justify-content-center align-items-center">
           <select id="selectMap">
@@ -40,9 +42,15 @@
         </div>
       
         <!-- Aquí va el contenido restante -->
-      
+        
         <div class="map" style="position: relative;">
           <div id="tooltip" style="position: absolute; display: none; background-color: #ffffff; padding: 5px;"></div>
+          <div>
+            <canvas id="barChartHorizontal"> </canvas>
+          </div>
+
+          <button type="button" class="btn btn-primary" id="barChart">BarChart</button>
+          <!-- <canvas id="barChartHorizontal"> </canvas> -->
         </div>
       </div>
       
@@ -84,6 +92,7 @@
     <script type="module" src="src/js/Time Series/drawLine.js"></script>
     <script type="module" src="src/js/drawMap/drawMapSpatial.js"></script>
     <script type="module" src="src/js/Calendar/drawCalendar.js"></script>
+    <script type="module" src="src/js/barChart/drawBarChartHor.js"></script>
     <!-- <script type="module" src="src/js/CrimeRate/getCrimeRate.js"></script> -->
   </body>
 </html>

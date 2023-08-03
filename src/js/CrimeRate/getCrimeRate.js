@@ -16,20 +16,28 @@ export async function getCrimeRateByYear(byLocation,byYear){
     switch (byLocation) {
         case "beat":
             chicagoCrimebyLocation = getTotalCrimesByBeat(dataChicagoYear);
+            console.log(chicagoCrimebyLocation);
             break;
         case "ward":
             chicagoCrimebyLocation = getTotalCrimesByWard(dataChicagoYear);
+            console.log(chicagoCrimebyLocation);
+
             break;
         case "district":
             chicagoCrimebyLocation = getTotalCrimesByDistrict(dataChicagoYear);
+            console.log(chicagoCrimebyLocation);
+
             break;
         case "community_area":
             chicagoCrimebyLocation = getTotalCrimesByCommunityArea(dataChicagoYear);
+            console.log(chicagoCrimebyLocation);
+
             break;
         default:
             break;
     }
-
+    console.log(chicagoCrimebyLocation);
+    
     return chicagoCrimebyLocation;
 }
 
@@ -43,7 +51,7 @@ export async function getCrimeRate(byLocation){
     }
     
     let chicagoCrimebyLocation = {};
-
+    let chicagoCrimebyLocationMoreImport = {};
     switch (byLocation) {
         case "beat":
             chicagoCrimebyLocation = getTotalCrimesByBeat(dataChicago);
@@ -60,6 +68,9 @@ export async function getCrimeRate(byLocation){
         default:
             break;
     }
+    console.log(chicagoCrimebyLocation);    
+    chicagoCrimebyLocationMoreImport = sortObjectEntries(chicagoCrimebyLocation,5)
+    console.log(chicagoCrimebyLocationMoreImport);
 
     return chicagoCrimebyLocation;
 }
@@ -71,7 +82,7 @@ export async function getDataTotal(){
     } catch (error) {
         console.log(error)
     } finally {
-        console.log(`Cantidad de dato chicago del 2001 al 2023 ${JSON.stringify(dataChicago,null,2)}`);
+        // console.log(`Cantidad de dato chicago del 2001 al 2023 ${JSON.stringify(dataChicago,null,2)}`);
     }
     return dataChicago;
 }
