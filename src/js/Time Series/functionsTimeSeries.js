@@ -264,8 +264,82 @@ function extractTotalCrimesPerHour(data) {
       }
     }
   }
-  console.log(result);
   return result;
+}
+
+
+
+  
+function  extractTotalCrimesPerHourV2(data) {
+
+  var now = moment().endOf('day').toDate();
+  var time_ago = moment().startOf('day').year(2001).month(0).date(1).toDate();
+  var listByHour = d3.timeDays(time_ago, now);
+
+  // byHours = {};
+  const sameDate = data.reduce((accumulator,currentValue) => {
+    
+    const dateOnly = currentValue.date.slice(0, 10);
+    const parser = d3.timeParse("%Y-%m-%d");
+    const dataObject = parser(dateOnly);
+    const formatter = d3.timeFormat("%a %b %d %Y %H:%M:%S GMT%Z (hora estándar de Colombia)");
+    
+    const fechaFormated = formatter(dataObject);
+
+    if (!accumulator[fechaFormated]) {
+      accumulator[fechaFormated] = []
+    }
+    const momentObj = moment(currentValue.date);
+    const formattedDate = momentObj.format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ") + " (hora estándar de Colombia)";
+    
+    accumulator[fechaFormated].push({
+      0:currentValue.primary_type,
+      1:formattedDate,
+    });
+
+    return accumulator;
+  },{});
+  // console.log("groups: ", sameDate);
+
+  var example_data = listByHour.map(function (dateElement, index) {
+    if(sameDate.hasOwnProperty(dateElement)) {
+      return {
+        date: dateElement,
+        details: sameDate[dateElement].map(function(e, i, arr) {
+          return {
+            'name': e[0],
+            'date': e[1],
+            // 'value': 3600 * ((arr.length - i) / 5) + Math.floor(Math.random() * 3600) * Math.round(Math.random() * (index / 365))
+            'value': 60*10
+          }
+        }),
+        init: function () {
+          this.total = this.details.reduce(function (prev, e) {
+            return prev + e.value;
+          }, 0);
+          return this;
+        },
+        summary: Object.entries(sameDate[dateElement].reduce((accumulator, currentValue) => {
+          const name = currentValue[0];
+          accumulator[name] = (accumulator[name] || 0) + 1;
+          return accumulator;
+        }, {})).map(([name, value]) => ({ name, value }))
+      }.init();
+    }
+
+    return {
+      date: dateElement,
+      details: [],
+      init: function () {
+        this.total = this.details.reduce(function (prev, e) {
+          return prev + e.value;
+        }, 0);
+        return this;
+      }
+    }.init();
+  });
+  // console.log("example_data:", example_data);
+  return example_data;
 }
 
 export {
@@ -275,5 +349,6 @@ export {
     countCrimesPerYearBySpecificCrime,
     countCrimesPerYearByRegion,
     counterCrimePerMounthBySpecificCrime,
-    extractTotalCrimesPerHour
+    extractTotalCrimesPerHour,
+    extractTotalCrimesPerHourV2
 }
