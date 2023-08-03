@@ -2,7 +2,7 @@
 
 /* globals d3 */
 
-var calendarHeatmap = {
+export var calendarHeatmap = {
 
   settings: {
     gutter: 5,
@@ -256,7 +256,9 @@ var calendarHeatmap = {
           .domain([-0.15 * max_value, max_value]);
         return color(d.total) || '#ff4500';
       })
-      .on('click', function(d) {
+      .on('click', function() {
+        var d = d3.select(this).data()[0]; // new add
+        
         if (calendarHeatmap.in_transition) { return; }
 
         // Set in_transition flag
@@ -276,46 +278,50 @@ var calendarHeatmap = {
         calendarHeatmap.drawChart();
       })
       .style('opacity', 0)
-      .on('mouseover', function(d) {
+      .on('mouseover', function() {
+        var d = d3.select(this).data()[0]; // new add
         if (calendarHeatmap.in_transition) { return; }
-
+      
+        // console.log("datos",d);
         // Construct tooltip
         var tooltip_html = '';
-        tooltip_html += '<div><span><strong>Total time tracked:</strong></span>';
+        tooltip_html += '<div><span><strong>Total de Crimenes: </strong></span>';
+        tooltip_html += '<span>' + (d.total === 0 ? ' 0' : ' ' + d.total + ' crimenes') + '</span></div>';
 
-        var sec = parseInt(d.total, 10);
-        var days = Math.floor(sec / 86400);
-        if (days > 0) {
-          tooltip_html += '<span>' + (days === 1 ? '1 day' : days + ' days') + '</span></div>';
-        }
-        var hours = Math.floor((sec - (days * 86400)) / 3600);
-        if (hours > 0) {
-          if (days > 0) {
-            tooltip_html += '<div><span></span><span>' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>';
-          } else {
-            tooltip_html += '<span>' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>';
-          }
-        }
-        var minutes = Math.floor((sec - (days * 86400) - (hours * 3600)) / 60);
-        if (minutes > 0) {
-          if (days > 0 || hours > 0) {
-            tooltip_html += '<div><span></span><span>' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>';
-          } else {
-            tooltip_html += '<span>' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>';
-          }
-        }
+        // var sec = parseInt(d.total, 10);
+        // var days = Math.floor(sec / 86400);
+        // if (days > 0) {
+        //   // tooltip_html += '<span>' + (days === 1 ? '1 day' : days + ' days') + '</span></div>';
+        //   tooltip_html += '<span>' + (days === 1 ? '0' : days + ' crimenes') + '</span></div>';
+        // }
+        // var hours = Math.floor((sec - (days * 86400)) / 3600);
+        // if (hours > 0) {
+        //   if (days > 0) {
+        //     tooltip_html += '<div><span></span><span>' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>';
+        //   } else {
+        //     tooltip_html += '<span>' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>';
+        //   }
+        // }
+        // var minutes = Math.floor((sec - (days * 86400) - (hours * 3600)) / 60);
+        // if (minutes > 0) {
+        //   if (days > 0 || hours > 0) {
+        //     tooltip_html += '<div><span></span><span>' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>';
+        //   } else {
+        //     tooltip_html += '<span>' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>';
+        //   }
+        // }
         tooltip_html += '<br />';
 
         // Add summary to the tooltip
         if (d.summary.length <= 5) {
           for (var i = 0; i < d.summary.length; i++) {
             tooltip_html += '<div><span><strong>' + d.summary[i].name + '</strong></span>';
-            tooltip_html += '<span>' + calendarHeatmap.formatTime(d.summary[i].value) + '</span></div>';
+            tooltip_html += '<span> ' + d.summary[i].value + '</span></div>';
           };
         } else {
           for (var i = 0; i < 5; i++) {
             tooltip_html += '<div><span><strong>' + d.summary[i].name + '</strong></span>';
-            tooltip_html += '<span>' + calendarHeatmap.formatTime(d.summary[i].value) + '</span></div>';
+            tooltip_html += '<span> ' + d.summary[i].value + '</span></div>';
           };
           tooltip_html += '<br />';
 
@@ -324,7 +330,7 @@ var calendarHeatmap = {
             other_projects_sum = +d.summary[i].value;
           };
           tooltip_html += '<div><span><strong>Other:</strong></span>';
-          tooltip_html += '<span>' + calendarHeatmap.formatTime(other_projects_sum) + '</span></div>';
+          tooltip_html += '<span>' + other_projects_sum + '</span></div>';
         }
 
         // Calculate tooltip position
@@ -389,7 +395,8 @@ var calendarHeatmap = {
         return yearScale(d.year());
       })
       .attr('y', calendarHeatmap.settings.label_padding / 2)
-      .on('mouseenter', function(year_label) {
+      .on('mouseenter', function() {
+        var year_label = d3.select(this).data()[0]; // new add
         if (calendarHeatmap.in_transition) { return; }
 
         calendarHeatmap.items.selectAll('.item-block-year')
@@ -409,7 +416,9 @@ var calendarHeatmap = {
           .ease(d3.easeLinear)
           .style('opacity', 1);
       })
-      .on('click', function(d) {
+      .on('click', function() {
+        var d = d3.select(this).data()[0]; // new add
+        
         if (calendarHeatmap.in_transition) { return; }
 
         // Set in_transition flag
@@ -500,7 +509,9 @@ var calendarHeatmap = {
       .attr('fill', function(d) {
         return (d.total > 0) ? color(d.total) : 'transparent';
       })
-      .on('click', function(d) {
+      .on('click', function() {
+        var d = d3.select(this).data()[0]; // new add
+        
         if (calendarHeatmap.in_transition) { return; }
 
         // Don't transition if there is no data to show
@@ -521,7 +532,9 @@ var calendarHeatmap = {
         calendarHeatmap.overview = 'day';
         calendarHeatmap.drawChart();
       })
-      .on('mouseover', function(d) {
+      .on('mouseover', function() {
+        var d = d3.select(this).data()[0]; // new add
+        
         if (calendarHeatmap.in_transition) { return; }
 
         // Pulsating animation
@@ -558,13 +571,13 @@ var calendarHeatmap = {
 
         // Construct tooltip
         var tooltip_html = '';
-        tooltip_html += '<div class="header"><strong>' + (d.total ? calendarHeatmap.formatTime(d.total) : 'No time') + ' tracked</strong></div>';
+        tooltip_html += '<div class="header"><strong>' + (d.total ? d.total : 'Ninguno') + ' Crimenes</strong></div>';
         tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY') + '</div><br>';
 
         // Add summary to the tooltip
         for (var i = 0; i < d.summary.length; i++) {
           tooltip_html += '<div><span><strong>' + d.summary[i].name + '</strong></span>';
-          tooltip_html += '<span>' + calendarHeatmap.formatTime(d.summary[i].value) + '</span></div>';
+          tooltip_html += '<span> ' + d.summary[i].value + '</span></div>';
         };
 
         // Calculate tooltip position
@@ -673,7 +686,9 @@ var calendarHeatmap = {
           .ease(d3.easeLinear)
           .style('opacity', 1);
       })
-      .on('click', function(d) {
+      .on('click', function() {
+        var d = d3.select(this).data()[0]; // new add
+        
         if (calendarHeatmap.in_transition) { return; }
 
         // Check month data
@@ -817,7 +832,9 @@ var calendarHeatmap = {
         return d.date;
       })
       .attr('offset', 0)
-      .on('click', function(d) {
+      .on('click', function() {
+        var d = d3.select(this).data()[0]; // new add
+        
         if (calendarHeatmap.in_transition) { return; }
 
         // Don't transition if there is no data to show
@@ -872,7 +889,8 @@ var calendarHeatmap = {
         return color(d.value) || '#ff4500';
       })
       .style('opacity', 0)
-      .on('mouseover', function(d) {
+      .on('mouseover', function() {
+        var d = d3.select(this).data()[0];
         if (calendarHeatmap.in_transition) { return; }
 
         // Get date from the parent node
@@ -946,7 +964,9 @@ var calendarHeatmap = {
         return weekScale(d.week());
       })
       .attr('y', calendarHeatmap.settings.label_padding / 2)
-      .on('mouseenter', function(weekday) {
+      .on('mouseenter', function() {
+        
+        var weekday = d3.select(this).data()[0];
         if (calendarHeatmap.in_transition) { return; }
 
         calendarHeatmap.items.selectAll('.item-block-month')
@@ -966,7 +986,9 @@ var calendarHeatmap = {
           .ease(d3.easeLinear)
           .style('opacity', 1);
       })
-      .on('click', function(d) {
+      .on('click', function() {
+        var d = d3.select(this).data()[0]; // new add
+        
         if (calendarHeatmap.in_transition) { return; }
 
         // Check week data
@@ -1011,7 +1033,9 @@ var calendarHeatmap = {
       .text(function(d) {
         return moment(d).format('dddd')[0];
       })
-      .on('mouseenter', function(d) {
+      .on('mouseenter', function() {
+        
+        var d = d3.select(this).data()[0];
         if (calendarHeatmap.in_transition) { return; }
 
         var selected_day = moment(d);
@@ -1101,7 +1125,9 @@ var calendarHeatmap = {
         return d.date;
       })
       .attr('offset', 0)
-      .on('click', function(d) {
+      .on('click', function() {
+        var d = d3.select(this).data()[0]; // new add
+        
         if (calendarHeatmap.in_transition) { return; }
 
         // Don't transition if there is no data to show
@@ -1156,7 +1182,9 @@ var calendarHeatmap = {
         return color(d.value) || '#ff4500';
       })
       .style('opacity', 0)
-      .on('mouseover', function(d) {
+      .on('mouseover', function() {
+        
+        var d = d3.select(this).data()[0];
         if (calendarHeatmap.in_transition) { return; }
 
         // Get date from the parent node
@@ -1233,6 +1261,8 @@ var calendarHeatmap = {
       })
       .attr('y', calendarHeatmap.settings.label_padding / 2)
       .on('mouseenter', function(weekday) {
+        
+        var weekday = d3.select(this).data()[0];
         if (calendarHeatmap.in_transition) { return; }
 
         calendarHeatmap.items.selectAll('.item-block-week')
@@ -1271,7 +1301,9 @@ var calendarHeatmap = {
       .text(function(d) {
         return moment(d).format('dddd')[0];
       })
-      .on('mouseenter', function(d) {
+      .on('mouseenter', function() {
+        
+        var d = d3.select(this).data()[0];
         if (calendarHeatmap.in_transition) { return; }
 
         var selected_day = moment(d);
@@ -1336,7 +1368,7 @@ var calendarHeatmap = {
       })
       .attr('width', function(d) {
         var end = itemScale(d3.timeSecond.offset(moment(d.date), d.value));
-        return Math.max((end - itemScale(moment(d.date))), 1);
+        return Math.max((end - itemScale(moment(d.date)) + 5), 1);
       })
       .attr('height', function() {
         return Math.min(projectScale.bandwidth(), calendarHeatmap.settings.max_block_height);
@@ -1345,13 +1377,15 @@ var calendarHeatmap = {
         return d.color || calendarHeatmap.color || '#ff4500';
       })
       .style('opacity', 0)
-      .on('mouseover', function(d) {
+      .on('mouseover', function() {
+        var d = d3.select(this).data()[0];
+        
         if (calendarHeatmap.in_transition) { return; }
 
         // Construct tooltip
         var tooltip_html = '';
         tooltip_html += '<div class="header"><strong>' + d.name + '</strong><div><br>';
-        tooltip_html += '<div><strong>' + (d.value ? calendarHeatmap.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
+        // tooltip_html += '<div><strong>' + (d.value ? calendarHeatmap.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
         tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY HH:mm') + '</div>';
 
         // Calculate tooltip position
@@ -1428,7 +1462,9 @@ var calendarHeatmap = {
         return timeScale(i);
       })
       .attr('y', calendarHeatmap.settings.label_padding / 2)
-      .on('mouseenter', function(d) {
+      .on('mouseenter', function() {
+        var d = d3.select(this).data()[0];
+        
         if (calendarHeatmap.in_transition) { return; }
 
         var selected = itemScale(moment(d));
@@ -1484,6 +1520,8 @@ var calendarHeatmap = {
         }
       })
       .on('mouseenter', function(project) {
+        var project = d3.select(this).data()[0];
+        
         if (calendarHeatmap.in_transition) { return; }
 
         calendarHeatmap.items.selectAll('.item-block')

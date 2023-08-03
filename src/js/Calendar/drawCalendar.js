@@ -5,6 +5,8 @@ from '../Time Series/functionsTimeSeries';
 
 import {getCrimeRate, getCrimeRateByYear, getDataTotal} from "../CrimeRate/getCrimeRate"
 
+import {calendarHeatmap} from "./src/calendar-heatmap"
+
 
 (async function () {
     // Initialize random data for the demo

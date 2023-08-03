@@ -302,7 +302,7 @@ function  extractTotalCrimesPerHourV2(data) {
             'name': e[0],
             'date': e[1],
             // 'value': 3600 * ((arr.length - i) / 5) + Math.floor(Math.random() * 3600) * Math.round(Math.random() * (index / 365))
-            'value': 60*10
+            'value': 1
           }
         }),
         init: function () {
