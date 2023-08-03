@@ -238,16 +238,16 @@ async function drawMapGeneral(boundariesCurrent) {
           let tooltip = d3.select("#tooltip");
           
           const numLocal = d3.select(this).attr("subLocation");
-          let content = "";
-          const byLocalRate= rateCrime[numLocal]
-          let sumTotal = 0;
-          for (const key in byLocalRate) {
-            if (Object.hasOwnProperty.call(byLocalRate, key)) {
-              const element = byLocalRate[key];
-              content += `${key}: ${element} <br>`;
-              sumTotal += element;
-            }
-          }
+          // let content = "";
+          // const byLocalRate= rateCrime[numLocal]
+          // let sumTotal = 0;
+          // for (const key in byLocalRate) {
+          //   if (Object.hasOwnProperty.call(byLocalRate, key)) {
+          //     const element = byLocalRate[key];
+          //     content += `${key}: ${element} <br>`;
+          //     sumTotal += element;
+          //   }
+          // }
   
           // tooltip
           //   // .style("left", xPosition+80 + "px")
@@ -266,8 +266,9 @@ async function drawMapGeneral(boundariesCurrent) {
 
           //draw Bar chart
           // let rateCrime = await getCrimeRate(boundariesCurrent)
-
-          drawTopCrimesTypesBarChart(rateCrime,numLocal);
+          const byLocalRate = rateCrime[numLocal];
+          
+          drawTopCrimesTypesBarChart(byLocalRate);
 
           /** invocar la serie temporal */
           const dataChicago = await getDataTotal(); 

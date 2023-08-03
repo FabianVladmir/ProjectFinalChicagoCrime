@@ -39,10 +39,10 @@ btnBarChart.addEventListener('click', async () =>{
 });
 
 let chart;
-function drawTopCrimesTypesBarChart(data, numRegion){
+function drawTopCrimesTypesBarChart(data){
 
-    const dataLabels = Object.keys(data[numRegion]);
-    const dataValues = Object.values(data[numRegion]);
+    const dataLabels = Object.keys(data);
+    const dataValues = Object.values(data);
     
     const ctx = document.getElementById('barChartHorizontal').getContext('2d');
     
@@ -54,7 +54,7 @@ function drawTopCrimesTypesBarChart(data, numRegion){
     data: {
         labels: dataLabels,
         datasets: [{
-            label: 'Easy as',
+            label: 'Mayor Cantidad de Crimen',
             data: dataValues,
             backgroundColor: [
                 'rgba(255, 26, 104, 0.2)',
