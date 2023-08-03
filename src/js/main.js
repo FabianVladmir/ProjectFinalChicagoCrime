@@ -9,7 +9,7 @@ import
 from './Time Series/drawLine.js';
 
 import 
-{ countCrimesPerYear, countCrimesPerYearBySpecificCrime,countCrimesPerYearByRegion, counterCrimePerMounthBySpecificCrime,countCrimesPerMonth } 
+{ countCrimesPerYear, countCrimesPerYearBySpecificCrime,countCrimesPerYearByRegion, counterCrimePerMounthBySpecificCrime,countCrimesPerMonth, extractTotalCrimesPerHour} 
 from './Time Series/functionsTimeSeries.js';
 
 import {getCrimeRate, getCrimeRateByYear} from "./CrimeRate/getCrimeRate.js"
@@ -41,12 +41,16 @@ async function showMapChicago (){
     try {
         const dataChicago = await fetchDataChicago();
 
-        // console.log(dataChicago);
+        console.log(dataChicago);
         
+
+        const totalCrimePerHours = extractTotalCrimesPerHour(dataChicago);
+
+        console.log(totalCrimePerHours);
         // console.log(`Data Chicago ${JSON.stringify(dataChicago,null,2)}`);
         // console.log(`Cantidad de datos: `, dataChicago.length);
         
-        const dataChicagoYear = await fetchDataChicagoByYear(2001);
+        // const dataChicagoYear = await fetchDataChicagoByYear(2001);
         
         // console.log(`Cantidad de dato chicago ${JSON.stringify(dataChicago,null,2)}`);
         // console.log(`Cantidad de dato chicago en años ${JSON.stringify(dataChicagoYear,null,2)}`);

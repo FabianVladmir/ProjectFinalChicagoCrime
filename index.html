@@ -14,7 +14,12 @@
     <script src="\node_modules\chart.js\dist\chart.umd.js"></script>
     <title>Vite App</title>
 
+    <!-- to calendar -->
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.min.js" charset="utf-8"></script>
+    <script src="./src/js/Calendar/dist/calendar-heatmap.min.js"></script>
+  
   </head>
   <body>
 
@@ -43,6 +48,10 @@
         </div>
       </div>
       
+      <div class="row" style="position: relative; border-radius: 10px; border: 1px solid lightgray; width:100%; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
+        <h3>Calendario</h3>
+        <div id="showCalendar"></div>
+      </div>
 
       <div class="row" style="border-radius: 10px; border: 1px solid lightgray; width:100%; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
         
@@ -53,18 +62,19 @@
             <button type="button" class="btn btn-primary" id="btnChicagoMap">Click</button>
           </a> -->
           
+          <!-- <canvas id="line-chart-crime" width="800" height="450"></canvas> -->
+          
+          <canvas id="line-chart-crime-types" width="800" height="450"></canvas> 
+
+          <!-- <canvas id="line-chart-crime-months" width="800" height="450"></canvas>    
+
+          <canvas id="line-chart" width="800" height="450"></canvas> -->
+          
           <button type="button" class="btn btn-primary" id="btnChicagoMap" hidden>Click</button>
           
         </form>
       </div>
 
-      <!-- <canvas id="line-chart-crime" width="800" height="450"></canvas> -->
-      
-      <canvas id="line-chart-crime-types" width="800" height="450"></canvas> 
-
-      <canvas id="line-chart-crime-months" width="800" height="450"></canvas>    
-
-      <canvas id="line-chart" width="800" height="450"></canvas>
       
       <div style="width: 800px;"><canvas id="acquisitions"></canvas></div>
     </div>
@@ -75,6 +85,7 @@
     <script type="module" src="src/js/data.js"></script>
     <script type="module" src="src/js/Time Series/drawLine.js"></script>
     <script type="module" src="src/js/drawMap/drawMapSpatial.js"></script>
+    <script type="module" src="src/js/Calendar/drawCalendar.js"></script>
     <!-- <script type="module" src="src/js/CrimeRate/getCrimeRate.js"></script> -->
   </body>
 </html>
