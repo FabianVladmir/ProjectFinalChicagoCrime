@@ -82,7 +82,7 @@ export async function getDataTotal(){
     } catch (error) {
         console.log(error)
     } finally {
-        console.log(`Cantidad de dato chicago del 2001 al 2023 ${JSON.stringify(dataChicago,null,2)}`);
+        // console.log(`Cantidad de dato chicago del 2001 al 2023 ${JSON.stringify(dataChicago,null,2)}`);
     }
     return dataChicago;
 }

@@ -11,6 +11,8 @@ import
 from '../Time Series/drawLine';
 
 
+import { drawTopCrimesTypesBarChart } from "../barChart/drawBarChartHor";
+
 //** d3 */
 var svg = d3.select(".map")
             .append("svg")
@@ -159,8 +161,8 @@ async function drawMapGeneral(boundariesCurrent) {
     nameByLocation.push(parseInt(key))
     sumTotal+=percent;
   }
-  console.log(percentByLocation);
-  console.log(nameByLocation);
+  // console.log(percentByLocation);
+  // console.log(nameByLocation);
   // percentByLocation = percentByLocation.map(percent => 1/percent);
   
   //normalization
@@ -171,7 +173,7 @@ async function drawMapGeneral(boundariesCurrent) {
   
   var scale = d3.scaleLinear().domain(domain).range(range);
   
-  console.log(percentByLocation);
+  // console.log(percentByLocation);
   
   /**draw Map*/
   
@@ -262,12 +264,17 @@ async function drawMapGeneral(boundariesCurrent) {
             tooltip.style("display", "none");
           }, 8000);
 
+          //draw Bar chart
+          // let rateCrime = await getCrimeRate(boundariesCurrent)
+
+          drawTopCrimesTypesBarChart(rateCrime,numLocal);
+
           /** invocar la serie temporal */
           const dataChicago = await getDataTotal(); 
           const totalCrimeTypeByRegion = countCrimesPerYearByRegion(dataChicago,boundariesCurrent);
           drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal);
   
-  
+          
         });
         
       }
