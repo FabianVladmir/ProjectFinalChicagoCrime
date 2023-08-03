@@ -18,7 +18,7 @@ var svg = d3.select(".map")
             .append("svg")
             .attr('width', 1400)
             .attr('height', 550)
-            .attr('transform', `translate(${400}, ${0})`) // Centrar el svg
+            .attr('transform', `translate(${100}, ${0})`) // Centrar el svg
 
 
 //** By Coordinates */
@@ -249,15 +249,15 @@ async function drawMapGeneral(boundariesCurrent) {
             }
           }
   
-          tooltip
-            // .style("left", xPosition+80 + "px")
-            // .style("top", yPosition+270 + "px")
-            .style("left",10 + "px")
-            .style("top", 1 + "px")
-            .style("display", "block")
-            .style("width", "300px")
-            // .text("Numero de Localidad: " + numLocal + ": "+ content);
-            .html("Numero de Localidad: " + numLocal + "<br> Total de Crimenes: "+ sumTotal +"<br>" + content);
+          // tooltip
+          //   // .style("left", xPosition+80 + "px")
+          //   // .style("top", yPosition+270 + "px")
+          //   .style("left",10 + "px")
+          //   .style("top", 1 + "px")
+          //   .style("display", "block")
+          //   .style("width", "300px")
+          //   // .text("Numero de Localidad: " + numLocal + ": "+ content);
+          //   .html("Numero de Localidad: " + numLocal + "<br> Total de Crimenes: "+ sumTotal +"<br>" + content);
   
             //hidden
           setTimeout(function () {
@@ -284,7 +284,7 @@ async function drawMapGeneral(boundariesCurrent) {
 
 
 //** plot Map by year*/
-async function drawMap(boundariesCurrent,byYear){
+async function drawMapByBoundaries(boundariesCurrent,byYear){
   // await getMap(boundariesCurrent)
   if (boundariesCurrent === "") {
     alert("Por favor seleccione una escala");  

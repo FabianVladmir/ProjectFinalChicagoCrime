@@ -45,6 +45,7 @@ function drawTopCrimesTypesBarChart(data, numRegion){
     const dataValues = Object.values(data[numRegion]);
     
     const ctx = document.getElementById('barChartHorizontal').getContext('2d');
+    
     if(chart){
         chart.destroy();
     }
@@ -75,7 +76,7 @@ function drawTopCrimesTypesBarChart(data, numRegion){
     },
     options: {
         indexAxis: 'y', // <-- here
-        responsive: true
+        responsive: false
     }
     });
 

@@ -43,15 +43,17 @@
       
         <!-- Aquí va el contenido restante -->
         
-        <div class="map" style="position: relative;">
-          <div id="tooltip" style="position: absolute; display: none; background-color: #ffffff; padding: 5px;"></div>
-          <div>
-            <canvas id="barChartHorizontal"> </canvas>
+        <div class="map-container" style="display: flex; flex-direction: row;">
+          <div class="bar_">
+            <canvas id="barChartHorizontal" width="550" height="250"></canvas>
+            <button type="button" class="btn btn-primary" id="barChart" hidden>BarChart</button>
           </div>
-
-          <button type="button" class="btn btn-primary" id="barChart">BarChart</button>
-          <!-- <canvas id="barChartHorizontal"> </canvas> -->
+          <div class="map">
+            <!-- <div id="tooltip" style="position: absolute; display: none; background-color: #ffffff; padding: 5px;"></div> -->
+            <!-- <canvas id="barChartHorizontal"> </canvas> -->
+          </div>
         </div>
+       
       </div>
       
       <div class="row" style="position: relative; border-radius: 10px; border: 1px solid lightgray; width:100%; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
