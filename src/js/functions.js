@@ -105,6 +105,28 @@ function sortObjectEntries(data, n) {
   return data;
 }
 
+function getTopRegionsCrimes(data, n) {
+  const result = {};
+
+  // Create an array of objects containing the region and its total crimes
+  const regionsData = Object.entries(data).map(([key, value]) => ({
+    region: key,
+    totalCrimes: Object.values(value).reduce((acc, val) => acc + val, 0),
+  }));
+
+  // Sort the array based on totalCrimes in descending order
+  regionsData.sort((a, b) => b.totalCrimes - a.totalCrimes);
+
+  // Take the top 'n' regions from the sorted array and store them in the result object
+  for (let i = 0; i < n && i < regionsData.length; i++) {
+    const regionKey = regionsData[i].region;
+    result[regionKey] = data[regionKey];
+  }
+
+  return result;
+}
+
+
 // function sortObjectEntries(obj, n) {
    
 //     let sortedList = Object.entries(obj).sort((a,  b)=>  {
@@ -179,5 +201,6 @@ export{
     getTotalCrimesByWard,
     getTotalCrimesByCommunityArea,
     getTotalCrimesByDistrict,
-    sortObjectEntries
+    sortObjectEntries,
+    getTopRegionsCrimes
 }
