@@ -21,7 +21,11 @@ export var calendarHeatmap = {
   /**
    * Initialize
    */
-  init: function(data, container, color, overview, handler) {
+  init: function(data, container, color, overview, handler, drawMapByBoundaries, drawMapGeneral) {
+    
+    calendarHeatmap.drawMapByBoundaries = drawMapByBoundaries;
+    calendarHeatmap.drawMapGeneral = drawMapGeneral;
+    
     // Set calendar data
     calendarHeatmap.data = data;
 
@@ -256,8 +260,20 @@ export var calendarHeatmap = {
           .domain([-0.15 * max_value, max_value]);
         return color(d.total) || '#ff4500';
       })
-      .on('click', function() {
+      .on('click',async function() {
         var d = d3.select(this).data()[0]; // new add
+        // console.log("GLOBAAAAAL: ", d.date.year());
+
+        /** ReDrawing Map */
+        const selectChicagoMap = document.querySelector('#selectMap');
+        console.log("boundariesCurrent: ", selectChicagoMap.value);
+        calendarHeatmap.drawMapByBoundaries(selectChicagoMap.value,d.date.year());
+        // OBSERVER
+        const inputYear = document.querySelector('#inputYear');
+        inputYear.value = d.date.year()
+
+
+        // await drawMapByBoyundaries(boundariesCurrent,d.date.year());
         
         if (calendarHeatmap.in_transition) { return; }
 
@@ -899,7 +915,7 @@ export var calendarHeatmap = {
         // Construct tooltip
         var tooltip_html = '';
         tooltip_html += '<div class="header"><strong>' + d.name + '</strong></div><br>';
-        tooltip_html += '<div><strong>' + (d.value ? calendarHeatmap.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
+        tooltip_html += '<div><strong>' + (d.value ? d.value : 'Ninguna') + ' delitos</strong></div>';
         tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
 
         // Calculate tooltip position
@@ -1193,7 +1209,7 @@ export var calendarHeatmap = {
         // Construct tooltip
         var tooltip_html = '';
         tooltip_html += '<div class="header"><strong>' + d.name + '</strong></div><br>';
-        tooltip_html += '<div><strong>' + (d.value ? calendarHeatmap.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
+        tooltip_html += '<div><strong>' + (d.value ? d.value : 'Ninguna') + ' delitos</strong></div>';
         tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
 
         // Calculate tooltip position
@@ -1563,7 +1579,16 @@ export var calendarHeatmap = {
 
         // Clean the canvas from whichever overview type was on
         if (calendarHeatmap.overview === 'year') {
+                  /** ReDrawing Map */
+          const selectChicagoMap = document.querySelector('#selectMap');
+          console.log("drawMapGeneral: ", selectChicagoMap.value);
+          calendarHeatmap.drawMapGeneral(selectChicagoMap.value);
+          // OBSERVER
+          const inputYear = document.querySelector('#inputYear');
+          inputYear.value = ""
+          
           calendarHeatmap.removeYearOverview();
+
         } else if (calendarHeatmap.overview === 'month') {
           calendarHeatmap.removeMonthOverview();
         } else if (calendarHeatmap.overview === 'week') {

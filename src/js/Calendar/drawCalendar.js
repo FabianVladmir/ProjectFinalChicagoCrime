@@ -7,6 +7,12 @@ import {getCrimeRate, getCrimeRateByYear, getDataTotal} from "../CrimeRate/getCr
 
 import {calendarHeatmap} from "./src/calendar-heatmap"
 
+// import { drawMapByBoundaries } from "../drawMap/drawMapSpatialByBoundaries";
+
+import { drawMapByBoundaries } from "../drawMap/drawMapSpatialByBoundaries";
+
+import { drawMapGeneral } from "../drawMap/drawMapSpatialGeneral";
+
 
 (async function () {
     // Initialize random data for the demo
@@ -21,7 +27,7 @@ import {calendarHeatmap} from "./src/calendar-heatmap"
     var color = '#cd2327';
 
     // Set overview type (choices are year, month and day)
-    var overview = 'year';
+    var overview = 'global';
 
     // Handler function
     // var print = function (val) {
@@ -29,5 +35,5 @@ import {calendarHeatmap} from "./src/calendar-heatmap"
     // };
 
     // Initialize calendar heatmap
-    calendarHeatmap.init(dataByHourV2, div_id, color, overview, print);
+    calendarHeatmap.init(dataByHourV2, div_id, color, overview, print,drawMapByBoundaries,drawMapGeneral);
   })();
