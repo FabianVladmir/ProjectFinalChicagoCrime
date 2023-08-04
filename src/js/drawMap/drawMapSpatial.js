@@ -10,8 +10,9 @@ import
 { drawTotalCrimeTimeSeries,drawTotalCrimeByTypesTimeSeries,drawTotalCrimeTypesByRegionTimeSeries,drawCrimeMonthByTypes } 
 from '../Time Series/drawLine';
 
+import { getTopRegionsCrimes } from "../functions";
 
-import { drawTopCrimesTypesBarChart } from "../barChart/drawBarChartHor";
+import { drawTopCrimesTypesBarChart, drawMultipleBarChart } from "../barChart/drawBarChartHor";
 import {svg} from "./getSVG"
 
 //** By Coordinates */
@@ -248,7 +249,7 @@ async function drawMapGeneral(boundariesCurrent) {
               sumTotal += element;
             }
           }
-  
+            
           // tooltip
           //   // .style("left", xPosition+80 + "px")
           //   // .style("top", yPosition+270 + "px")
@@ -274,7 +275,12 @@ async function drawMapGeneral(boundariesCurrent) {
           const dataChicago = await getDataTotal(); 
           const totalCrimeTypeByRegion = countCrimesPerYearByRegion(dataChicago,boundariesCurrent);
           drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal);
-  
+          
+          let chicagoTopRegionCrimes = {}
+
+          chicagoTopRegionCrimes = getTopRegionsCrimes(totalCrimeTypeByRegion, 5);
+
+          drawMultipleBarChart(chicagoTopRegionCrimes,boundariesCurrent) 
           
         });
         
