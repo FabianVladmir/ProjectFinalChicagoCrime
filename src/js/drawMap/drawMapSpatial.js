@@ -238,16 +238,16 @@ async function drawMapGeneral(boundariesCurrent) {
           let tooltip = d3.select("#tooltip");
           
           const numLocal = d3.select(this).attr("subLocation");
-          // let content = "";
-          // const byLocalRate= rateCrime[numLocal]
-          // let sumTotal = 0;
-          // for (const key in byLocalRate) {
-          //   if (Object.hasOwnProperty.call(byLocalRate, key)) {
-          //     const element = byLocalRate[key];
-          //     content += `${key}: ${element} <br>`;
-          //     sumTotal += element;
-          //   }
-          // }
+          let content = "";
+          const byLocalRate= rateCrime[numLocal]
+          let sumTotal = 0;
+          for (const key in byLocalRate) {
+            if (Object.hasOwnProperty.call(byLocalRate, key)) {
+              const element = byLocalRate[key];
+              content += `${key}: ${element} <br>`;
+              sumTotal += element;
+            }
+          }
   
           // tooltip
           //   // .style("left", xPosition+80 + "px")
@@ -263,12 +263,12 @@ async function drawMapGeneral(boundariesCurrent) {
           setTimeout(function () {
             tooltip.style("display", "none");
           }, 8000);
-
+          
           //draw Bar chart
           // let rateCrime = await getCrimeRate(boundariesCurrent)
-          const byLocalRate = rateCrime[numLocal];
+          // const byLocalRate = rateCrime[numLocal];
           
-          drawTopCrimesTypesBarChart(byLocalRate);
+          drawTopCrimesTypesBarChart(byLocalRate,boundariesCurrent,  numLocal, sumTotal);
 
           /** invocar la serie temporal */
           const dataChicago = await getDataTotal(); 
@@ -479,16 +479,16 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
           let tooltip = d3.select("#tooltip");
           
           const numLocal = d3.select(this).attr("subLocation");
-          // let content = "";
-          // const byLocalRate= rateCrime[numLocal]
-          // let sumTotal = 0;
-          // for (const key in byLocalRate) {
-          //   if (Object.hasOwnProperty.call(byLocalRate, key)) {
-          //     const element = byLocalRate[key];
-          //     content += `${key}: ${element} <br>`;
-          //     sumTotal += element;
-          //   }
-          // }
+          let content = "";
+          const byLocalRate= rateCrime[numLocal]
+          let sumTotal = 0;
+          for (const key in byLocalRate) {
+            if (Object.hasOwnProperty.call(byLocalRate, key)) {
+              const element = byLocalRate[key];
+              content += `${key}: ${element} <br>`;
+              sumTotal += element;
+            }
+          }
           // xPosition = xPosition/2
           // yPosition = yPosition/2
 
@@ -504,9 +504,15 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
           // setTimeout(function () {
           //   tooltip.style("display", "none");
           // }, 8000);
-          const byLocalRate = rateCrime[numLocal];
-          
-          drawTopCrimesTypesBarChart(byLocalRate);
+          const titleMap = document.getElementById("title-map");
+          const scriptHTML = `Numero de Localidad: " + numLocal + "<br> Total de Crimenes: "+ sumTotal +"<br>`;
+          titleMap.innerHTML += scriptHTML;
+
+          // const byLocalRate = rateCrime[numLocal];
+          console.log("Desde el mapa ");
+          console.log(numLocal);
+          console.log(sumTotal);
+          drawTopCrimesTypesBarChart(byLocalRate,boundariesCurrent,  numLocal, sumTotal);
 
           /** invocar la serie temporal */
           // const dataChicago = await getDataTotal(); 

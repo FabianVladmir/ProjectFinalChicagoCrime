@@ -39,7 +39,12 @@ btnBarChart.addEventListener('click', async () =>{
 });
 
 let chart;
-function drawTopCrimesTypesBarChart(data){
+function drawTopCrimesTypesBarChart(data,boundariesCurrent, numLocal, sumTotal){
+    
+    console.log(numLocal);
+    console.log(sumTotal);
+    console.log(boundariesCurrent);
+
 
     const dataLabels = Object.keys(data);
     const dataValues = Object.values(data);
@@ -54,7 +59,7 @@ function drawTopCrimesTypesBarChart(data){
     data: {
         labels: dataLabels,
         datasets: [{
-            label: 'Mayor Cantidad de Crimen',
+            label: `AREA: ${boundariesCurrent} - ZONA: ${numLocal} - TOTAL DELITOS:${sumTotal} `,
             data: dataValues,
             backgroundColor: [
                 'rgba(255, 26, 104, 0.2)',

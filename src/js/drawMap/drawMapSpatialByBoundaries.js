@@ -201,16 +201,16 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
           let tooltip = d3.select("#tooltip");
           
           const numLocal = d3.select(this).attr("subLocation");
-          // let content = "";
-          // const byLocalRate= rateCrime[numLocal]
-          // let sumTotal = 0;
-          // for (const key in byLocalRate) {
-          //   if (Object.hasOwnProperty.call(byLocalRate, key)) {
-          //     const element = byLocalRate[key];
-          //     content += `${key}: ${element} <br>`;
-          //     sumTotal += element;
-          //   }
-          // }
+          let content = "";
+          const byLocalRate= rateCrime[numLocal]
+          let sumTotal = 0;
+          for (const key in byLocalRate) {
+            if (Object.hasOwnProperty.call(byLocalRate, key)) {
+              const element = byLocalRate[key];
+              content += `${key}: ${element} <br>`;
+              sumTotal += element;
+            }
+          }
           // xPosition = xPosition/2
           // yPosition = yPosition/2
 
@@ -226,9 +226,8 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
           // setTimeout(function () {
           //   tooltip.style("display", "none");
           // }, 8000);
-          const byLocalRate = rateCrime[numLocal];
-          
-          drawTopCrimesTypesBarChart(byLocalRate);
+                    
+          drawTopCrimesTypesBarChart(byLocalRate,boundariesCurrent,  numLocal, sumTotal);
 
           /** invocar la serie temporal */
           // const dataChicago = await getDataTotal(); 
