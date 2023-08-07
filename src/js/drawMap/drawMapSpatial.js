@@ -10,14 +10,15 @@ import
 { drawTotalCrimeTimeSeries,drawTotalCrimeByTypesTimeSeries,drawTotalCrimeTypesByRegionTimeSeries,drawCrimeMonthByTypes } 
 from '../Time Series/drawLine';
 
+import { getTopRegionsCrimes } from "../functions";
 
-import { drawTopCrimesTypesBarChart } from "../barChart/drawBarChartHor";
 
 import { rawDataToDateByDay } from "../radialChart/preProcessData";
 import { drawRadialByYear } from "../radialChart/drawRadialChart";
 
 
 // global svg
+import { drawTopCrimesTypesBarChart, drawMultipleBarChart } from "../barChart/drawBarChartHor";
 import {svg} from "./getSVG"
 
 //** By Coordinates */
@@ -278,11 +279,63 @@ async function drawMapGeneral(boundariesCurrent) {
         //   d3.select(this).attr("fill", originalColor)
   
         // })
-        .on("click",async function (event) {
+        // .on("click",async function (event) {
 
-          // selectedPolygons = []
+        //   // selectedPolygons = []
 
-          // const numLocal = d3.select(this).attr("subLocation");
+        //   // const numLocal = d3.select(this).attr("subLocation");
+        // })
+        .on("click",async function () {
+          let coordinates = d3.select(this).data()[0];
+          // console.log(coordinates);
+          let centroid = d3.polygonCentroid(coordinates);
+          let xPosition = x(centroid[0]);
+          let yPosition = y(centroid[1]);
+          let tooltip = d3.select("#tooltip");
+          
+          const numLocal = d3.select(this).attr("subLocation");
+          let content = "";
+          const byLocalRate= rateCrime[numLocal]
+          let sumTotal = 0;
+          for (const key in byLocalRate) {
+            if (Object.hasOwnProperty.call(byLocalRate, key)) {
+              const element = byLocalRate[key];
+              content += `${key}: ${element} <br>`;
+              sumTotal += element;
+            }
+          }
+            
+          // tooltip
+          //   // .style("left", xPosition+80 + "px")
+          //   // .style("top", yPosition+270 + "px")
+          //   .style("left",10 + "px")
+          //   .style("top", 1 + "px")
+          //   .style("display", "block")
+          //   .style("width", "300px")
+          //   // .text("Numero de Localidad: " + numLocal + ": "+ content);
+          //   .html("Numero de Localidad: " + numLocal + "<br> Total de Crimenes: "+ sumTotal +"<br>" + content);
+  
+            //hidden
+          setTimeout(function () {
+            tooltip.style("display", "none");
+          }, 8000);
+          
+          //draw Bar chart
+          // let rateCrime = await getCrimeRate(boundariesCurrent)
+          // const byLocalRate = rateCrime[numLocal];
+          
+          drawTopCrimesTypesBarChart(byLocalRate,boundariesCurrent,  numLocal, sumTotal);
+
+          /** invocar la serie temporal */
+          const dataChicago = await getDataTotal(); 
+          const totalCrimeTypeByRegion = countCrimesPerYearByRegion(dataChicago,boundariesCurrent);
+          drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal);
+          
+          let chicagoTopRegionCrimes = {}
+
+          chicagoTopRegionCrimes = getTopRegionsCrimes(totalCrimeTypeByRegion, 5);
+
+          drawMultipleBarChart(chicagoTopRegionCrimes,boundariesCurrent) 
           
           // const byLocalRate= rateCrime[numLocal]
           // let sumTotal = 0;

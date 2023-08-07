@@ -1,4 +1,4 @@
-import {getTotalCrimesByBeat, getTotalCrimesByCommunityArea, getTotalCrimesByWard, getTotalCrimesByDistrict, sortObjectEntries, getTotalCrimesByLocationByDistrict} from '../functions' // function  filter by beats, ward, district, and community area 
+import {getTotalCrimesByBeat, getTotalCrimesByCommunityArea, getTotalCrimesByWard, getTotalCrimesByDistrict, sortObjectEntries, getTopRegionsCrimes, getTotalCrimesByLocationByDistrict} from '../functions' // function  filter by beats, ward, district, and community area 
 import {fetchDataChicago, fetchDataChicagoByYear} from '../APIChicagoCrime'; // to download chicago data
 
 export async function getCrimeRateByYear(byLocation,byYear){
@@ -52,6 +52,7 @@ export async function getCrimeRate(byLocation){
     
     let chicagoCrimebyLocation = {};
     let chicagoCrimebyLocationMoreImport = {};
+    let chicagoTopRegionCrimes = {};
     switch (byLocation) {
         case "beat":
             chicagoCrimebyLocation = getTotalCrimesByBeat(dataChicago);
@@ -71,6 +72,9 @@ export async function getCrimeRate(byLocation){
     console.log(chicagoCrimebyLocation);    
     chicagoCrimebyLocationMoreImport = sortObjectEntries(chicagoCrimebyLocation,5)
     console.log(chicagoCrimebyLocationMoreImport);
+    chicagoTopRegionCrimes = getTopRegionsCrimes(chicagoCrimebyLocation,5)
+    
+    console.log(chicagoTopRegionCrimes);
 
     return chicagoCrimebyLocation;
 }

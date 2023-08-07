@@ -39,6 +39,8 @@ btnBarChart.addEventListener('click', async () =>{
 });
 
 let chart;
+
+let chart2;
 function drawTopCrimesTypesBarChart(data,boundariesCurrent, numLocal, sumTotal){
     
     console.log(numLocal);
@@ -87,6 +89,73 @@ function drawTopCrimesTypesBarChart(data,boundariesCurrent, numLocal, sumTotal){
 
 }
 
+function drawMultipleBarChart(data,boundariesCurrent ){
+    var densityCanvas = document.getElementById("densityChart");
+
+    const dataLabels = Object.keys(data);
+    const dataValues = Object.values(data);
+
+
+    console.log(dataLabels)
+    console.log(dataValues)
+    // Chart.defaults.global.defaultFontFamily = "Lato";
+    // Chart.defaults.global.defaultFontSize = 18;
+    if(chart2){
+        chart2.destroy();
+    }
+    var densityData = {
+        label: 'THEFT',
+        data: [5427, 5243, 5514, 3933, 1326, 687],
+        backgroundColor: 'rgba(255, 26, 104, 0.2)',
+        borderColor: 'rgba(255, 26, 104, 1)',
+        yAxisID: "y-axis-density"
+    };
+    
+    var gravityData = {
+        label: 'BATTERY',
+        data: [40, 50, 10, 37, 51, 87],
+        backgroundColor: 'rgba(99, 132, 0, 0.6)',
+        borderColor: 'rgba(255, 206, 86, 1)',
+        yAxisID: "y-axis-gravity"
+    };
+    
+    var CriminalDamage = {
+        label: 'CRIMINAL DAMAGE',
+        data: [37, 89, 98, 37, 231, 90],
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        yAxisID: "y-axis-gravity"
+    };
+    
+
+    var planetData = {
+        labels: ["1", "2", "4", "5", "6", "7"],
+        datasets: [densityData, gravityData,CriminalDamage]
+    };
+    
+    var chartOptions = {
+    scales: {
+        xAxes: [{
+        barPercentage: 1,
+        categoryPercentage: 0.6
+        }],
+        yAxes: [{
+        id: "y-axis-density"
+        }, {
+        id: "y-axis-gravity"
+        }]
+    }
+    };
+    
+    chart2 = new Chart(densityCanvas, {
+    type: 'bar',
+    data: planetData,
+    options: chartOptions
+    });
+
+}
+
 export {
-    drawTopCrimesTypesBarChart
+    drawTopCrimesTypesBarChart,
+    drawMultipleBarChart
 }
