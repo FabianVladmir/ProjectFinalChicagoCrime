@@ -345,8 +345,8 @@ export var calendarHeatmap = {
           for (var i = 5; i < d.summary.length; i++) {
             other_projects_sum = +d.summary[i].value;
           };
-          tooltip_html += '<div><span><strong>Other:</strong></span>';
-          tooltip_html += '<span>' + other_projects_sum + '</span></div>';
+          // tooltip_html += '<div><span><strong>Other:</strong></span>';
+          // tooltip_html += '<span>' + other_projects_sum + '</span></div>';
         }
 
         // Calculate tooltip position

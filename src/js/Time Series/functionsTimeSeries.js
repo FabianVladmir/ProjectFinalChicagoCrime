@@ -312,7 +312,7 @@ function extractTotalCrimesPerHour(data) {
 
 
   
-function  extractTotalCrimesPerHourV2(data) {
+function extractTotalCrimesPerHourV2(data) {
 
   var now = moment().endOf('day').toDate();
   var time_ago = moment().startOf('day').year(2001).month(0).date(1).toDate();

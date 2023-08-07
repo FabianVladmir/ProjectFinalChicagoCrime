@@ -105,6 +105,10 @@ function sortObjectEntries(data, n) {
   return data;
 }
 
+function getTotalCrimesByLocationByDistrict (data,name) {
+  return data.filter((elem) => elem.district == parseInt(name))
+}
+
 // function sortObjectEntries(obj, n) {
    
 //     let sortedList = Object.entries(obj).sort((a,  b)=>  {
@@ -179,5 +183,6 @@ export{
     getTotalCrimesByWard,
     getTotalCrimesByCommunityArea,
     getTotalCrimesByDistrict,
+    getTotalCrimesByLocationByDistrict,
     sortObjectEntries
 }

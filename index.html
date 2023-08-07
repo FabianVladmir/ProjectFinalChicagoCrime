@@ -46,7 +46,9 @@
         <div class="map-container" style="display: flex; flex-direction: row;">
           <div class="bar_">
             <p id="title-map">  </p>
-            <canvas id="barChartHorizontal" width="550" height="250"></canvas>
+            <canvas id="barChartHorizontal" width="450" height="150"></canvas>
+            <div id="chart-radial"></div>
+            
             <button type="button" class="btn btn-primary" id="barChart" hidden>BarChart</button>
           </div>
           <div class="map">
@@ -98,4 +100,11 @@
     <script type="module" src="src/js/barChart/drawBarChartHor.js"></script>
     <!-- <script type="module" src="src/js/CrimeRate/getCrimeRate.js"></script> -->
   </body>
+  
+  <style>
+    polygon {
+      transition: transform 0.3s; /* Add a transition for smooth scaling */
+    }
+  </style>
+  
 </html>
