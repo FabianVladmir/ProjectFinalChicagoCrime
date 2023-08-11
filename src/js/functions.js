@@ -105,6 +105,10 @@ function sortObjectEntries(data, n) {
   return data;
 }
 
+function getTotalCrimesByLocationByDistrict (data,name) {
+  return data.filter((elem) => elem.district == parseInt(name))
+}
+
 function getTopRegionsCrimes(data, n) {
   const result = {};
 
@@ -201,6 +205,7 @@ export{
     getTotalCrimesByWard,
     getTotalCrimesByCommunityArea,
     getTotalCrimesByDistrict,
+    getTotalCrimesByLocationByDistrict,
     sortObjectEntries,
     getTopRegionsCrimes
 }

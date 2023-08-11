@@ -1,10 +1,28 @@
 
+import * as d3 from "d3";
 import name_value from "./listLocations";
-import {getCrimeRate, getCrimeRateByYear, getDataTotal} from "../CrimeRate/getCrimeRate"
-import {svg} from "./getSVG"
-import { drawTopCrimesTypesBarChart } from "../barChart/drawBarChartHor";
+import {getCrimeRate, getCrimeRateByYear, getDataTotal, getCrimeByLocation} from "../CrimeRate/getCrimeRate"
 
-const interpolateColor = d3.interpolateRgb("#FFEECC", "#C51605");
+import 
+{ countCrimesPerYear, countCrimesPerYearBySpecificCrime,countCrimesPerYearByRegion, counterCrimePerMounthBySpecificCrime,countCrimesPerMonth,extractTotalCrimesPerHourV2} 
+from '../Time Series/functionsTimeSeries';
+
+import 
+{ drawTotalCrimeTimeSeries,drawTotalCrimeByTypesTimeSeries,drawTotalCrimeTypesByRegionTimeSeries,drawCrimeMonthByTypes } 
+from '../Time Series/drawLine';
+
+import { getTopRegionsCrimes } from "../functions";
+
+
+import { rawDataToDateByDay } from "../radialChart/preProcessData";
+import { drawRadialByYear } from "../radialChart/drawRadialChart";
+
+
+// global svg
+import { drawTopCrimesTypesBarChart, drawMultipleBarChart } from "../barChart/drawBarChartHor";
+import {svg} from "./getSVG"
+
+const interpolateColor = d3.interpolateRgb("#FFFF99", "#FF0000");
 
 export async function drawMapGeneral(boundariesCurrent) {
     try {
@@ -136,6 +154,9 @@ export async function drawMapGeneral(boundariesCurrent) {
     
     /**draw Map*/
     
+    svg.selectAll("*").remove();
+  
+    
     //each boundaries
     for (var i = 0; i < coordinatesList.length; i++) {
       // console.log("INDICES LIST: ", locationList[i]);
@@ -145,98 +166,164 @@ export async function drawMapGeneral(boundariesCurrent) {
         //total of polygon
         for (let k = 0; k < coordinatesList[i][j].length; k++) {
           svg.append("polygon").data([coordinatesList[i][j][k]])
-          .attr("points", function (d) {
-              return d.map(function (d) {
-                  return [x(d[0]), y(d[1])].join(",");
-              }).join(" ");
-          })
-          .attr('stroke-width', 1.5)
-          .attr("fill", function (d) {
-            const idx = nameByLocation.indexOf(locationList[i]);
-            // console.log(locationList[i]);
-            // console.log(idx);
-            // console.log(interpolateColor(scale(percentByLocation[idx]*10)));
-            // console.log(percentByLocation[idx]);
-            // console.log(locationList[i]);
-            if (idx == -1) {
-              console.log("no existe");
-              return interpolateColor(scale(0*10));
+        .attr("points", function (d) {
+            return d.map(function (d) {
+                return [x(d[0])/1.4, y(d[1])/0.9].join(",");
+            }).join(" ");
+        })
+        .attr('stroke-width', 1.5)
+        .attr("fill", function (d) {
+          const idx = nameByLocation.indexOf(locationList[i]);
+          // console.log(locationList[i]);
+          // console.log(idx);
+          // console.log(interpolateColor(scale(percentByLocation[idx]*10)));
+          // console.log(percentByLocation[idx]);
+          // console.log(locationList[i]);
+          if (idx == -1) {
+            console.log("no existe");
+            return interpolateColor(scale(0*10));
+          }
+          if (boundariesCurrent === "district")
+            return interpolateColor(scale(percentByLocation[idx]*10));          
+          if (boundariesCurrent === "ward")
+            return interpolateColor(scale(percentByLocation[idx]*100));
+          if (boundariesCurrent === "beat")
+            return interpolateColor(scale(percentByLocation[idx]*100));
+          if (boundariesCurrent === "community_area")
+            return interpolateColor(scale(percentByLocation[idx]*100));
+        })
+        // .attr("fill", 'rgb(0,' + (255 * percentByLocation[i]) + ',0)')
+        .attr("subLocation", locationList[i])
+        // .attr("fill", '#D0D0D0')
+        
+        // rgb(212, 173, 252)
+        .attr("stroke", 'white')
+        .on("mouseover", async function () {
+          var originalColor = d3.select(this).attr("fill");
+          var originalStrokeWidth = d3.select(this).attr("stroke-width");
+
+          d3.select(this).attr("stroke-width", 2); 
+
+          var centroid = d3.polygonCentroid(d3.select(this).data()[0]);
+          var xPosition = x(centroid[0]);
+          var yPosition = y(centroid[1]);
+
+          d3.select(this)
+            .style("transform-origin", xPosition + "px " + yPosition + "px")
+            .style("transform", "scale(1.1)"); 
+
+          // d3.select(this).attr("fill", "orange");
+
+          // Hacer que el polígono resaltado se posicione delante de los demás
+          d3.select(this).raise();
+
+          //draw bar
+
+          const numLocal = d3.select(this).attr("subLocation");
+          const byLocalRate= rateCrime[numLocal]
+          let sumTotal = 0;
+          for (const key in byLocalRate) {
+            if (Object.hasOwnProperty.call(byLocalRate, key)) {
+              const element = byLocalRate[key];
+              // content += `${key}: ${element} <br>`;
+              sumTotal += element;
             }
-            if (boundariesCurrent === "district")
-              return interpolateColor(scale(percentByLocation[idx]*10));          
-            if (boundariesCurrent === "ward")
-              return interpolateColor(scale(percentByLocation[idx]*100));
-            if (boundariesCurrent === "beat")
-              return interpolateColor(scale(percentByLocation[idx]*100));
-            if (boundariesCurrent === "community_area")
-              return interpolateColor(scale(percentByLocation[idx]*100));
-          })
-          // .attr("fill", 'rgb(0,' + (255 * percentByLocation[i]) + ',0)')
-          .attr("subLocation", locationList[i])
-          // .attr("fill", '#D0D0D0')
+          }
           
-          // rgb(212, 173, 252)
-          .attr("stroke", 'white')
-          .on("mouseover", function () {
-            var originalColor = d3.select(this).attr("fill");  
-            d3.select(this).attr("fill", '#D0D0D0');
-            d3.select(this).on("mouseout", function () {
-              d3.select(this).attr("fill", originalColor);
-            });
-          })
-          // .on("mouseout", function () {
-          //   d3.select(this).attr("fill", originalColor)
-    
-          // })
-          .on("click",async function () {
-            let coordinates = d3.select(this).data()[0];
-            // console.log(coordinates);
-            let centroid = d3.polygonCentroid(coordinates);
-            let xPosition = x(centroid[0]);
-            let yPosition = y(centroid[1]);
-            let tooltip = d3.select("#tooltip");
-            
-            const numLocal = d3.select(this).attr("subLocation");
-            // let content = "";
-            // const byLocalRate= rateCrime[numLocal]
-            // let sumTotal = 0;
-            // for (const key in byLocalRate) {
-            //   if (Object.hasOwnProperty.call(byLocalRate, key)) {
-            //     const element = byLocalRate[key];
-            //     content += `${key}: ${element} <br>`;
-            //     sumTotal += element;
-            //   }
-            // }
-    
-            // tooltip
-            //   // .style("left", xPosition+80 + "px")
-            //   // .style("top", yPosition+270 + "px")
-            //   .style("left",10 + "px")
-            //   .style("top", 1 + "px")
-            //   .style("display", "block")
-            //   .style("width", "300px")
-            //   // .text("Numero de Localidad: " + numLocal + ": "+ content);
-            //   .html("Numero de Localidad: " + numLocal + "<br> Total de Crimenes: "+ sumTotal +"<br>" + content);
-    
-              //hidden
-            setTimeout(function () {
-              tooltip.style("display", "none");
-            }, 8000);
-  
-            //draw Bar chart
-            // let rateCrime = await getCrimeRate(boundariesCurrent)
-            const byLocalRate = rateCrime[numLocal];
-            
-            drawTopCrimesTypesBarChart(byLocalRate);
-  
-            /** invocar la serie temporal */
-            const dataChicago = await getDataTotal(); 
-            const totalCrimeTypeByRegion = countCrimesPerYearByRegion(dataChicago,boundariesCurrent);
-            drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal);
-    
-            
+          const dataChicago = await getDataTotal(); 
+              
+          drawTopCrimesTypesBarChart(byLocalRate,boundariesCurrent, numLocal, sumTotal);
+
+          /** invocar la serie temporal */
+          const totalCrimeTypeByRegion = countCrimesPerYearByRegion(dataChicago,boundariesCurrent);
+          drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal);
+
+          d3.select(this).on("mouseout", function () {
+            d3.select(this)
+              .attr("stroke-width", originalStrokeWidth)
+              .attr("fill", originalColor)
+              .style("transform", "scale(1)"); "orange"
           });
+        })
+        // .on("mouseout", function () {
+        //   d3.select(this).attr("fill", originalColor)
+  
+        // })
+        // .on("click",async function (event) {
+
+        //   // selectedPolygons = []
+
+        //   // const numLocal = d3.select(this).attr("subLocation");
+        // })
+        .on("click",async function () {
+          let coordinates = d3.select(this).data()[0];
+          // console.log(coordinates);
+          let centroid = d3.polygonCentroid(coordinates);
+          let xPosition = x(centroid[0]);
+          let yPosition = y(centroid[1]);
+          let tooltip = d3.select("#tooltip");
           
+          const numLocal = d3.select(this).attr("subLocation");
+          let content = "";
+          const byLocalRate= rateCrime[numLocal]
+          let sumTotal = 0;
+          for (const key in byLocalRate) {
+            if (Object.hasOwnProperty.call(byLocalRate, key)) {
+              const element = byLocalRate[key];
+              content += `${key}: ${element} <br>`;
+              sumTotal += element;
+            }
+          }
+            
+          // tooltip
+          //   // .style("left", xPosition+80 + "px")
+          //   // .style("top", yPosition+270 + "px")
+          //   .style("left",10 + "px")
+          //   .style("top", 1 + "px")
+          //   .style("display", "block")
+          //   .style("width", "300px")
+          //   // .text("Numero de Localidad: " + numLocal + ": "+ content);
+          //   .html("Numero de Localidad: " + numLocal + "<br> Total de Crimenes: "+ sumTotal +"<br>" + content);
+  
+            //hidden
+          setTimeout(function () {
+            tooltip.style("display", "none");
+          }, 8000);
+          
+          //draw Bar chart
+          // let rateCrime = await getCrimeRate(boundariesCurrent)
+          // const byLocalRate = rateCrime[numLocal];
+          
+          drawTopCrimesTypesBarChart(byLocalRate,boundariesCurrent,  numLocal, sumTotal);
+
+          /** invocar la serie temporal */
+          const totalCrimeTypeByRegion = countCrimesPerYearByRegion(dataChicago,boundariesCurrent);
+          drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal);
+          
+          let chicagoTopRegionCrimes = {}
+
+          chicagoTopRegionCrimes = getTopRegionsCrimes(totalCrimeTypeByRegion, 5);
+
+          drawMultipleBarChart(chicagoTopRegionCrimes,boundariesCurrent) 
+          
+          // const byLocalRate= rateCrime[numLocal]
+          // let sumTotal = 0;
+          // for (const key in byLocalRate) {
+          //   if (Object.hasOwnProperty.call(byLocalRate, key)) {
+          //     const element = byLocalRate[key];
+          //     // content += `${key}: ${element} <br>`;
+          //     sumTotal += element;
+          //   }
+          // }
+          // const dataChicago = await getDataTotal(); 
+            
+          // drawTopCrimesTypesBarChart(byLocalRate,boundariesCurrent, numLocal, sumTotal);
+
+          // /** invocar la serie temporal */
+          // const totalCrimeTypeByRegion = countCrimesPerYearByRegion(dataChicago,boundariesCurrent);
+          // drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal);
+              
+        });        
         }
       }
     }  

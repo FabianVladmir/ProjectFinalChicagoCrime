@@ -271,6 +271,11 @@ export var calendarHeatmap = {
         // OBSERVER
         const inputYear = document.querySelector('#inputYear');
         inputYear.value = d.date.year()
+        // CAMBIAR TITULO
+        const changeTitleMap = document.querySelector('#title-map');
+        changeTitleMap.textContent = "Tendencia Cartográfica en el Año " + d.date.year();
+        
+        
 
 
         // await drawMapByBoyundaries(boundariesCurrent,d.date.year());
@@ -345,8 +350,8 @@ export var calendarHeatmap = {
           for (var i = 5; i < d.summary.length; i++) {
             other_projects_sum = +d.summary[i].value;
           };
-          tooltip_html += '<div><span><strong>Other:</strong></span>';
-          tooltip_html += '<span>' + other_projects_sum + '</span></div>';
+          // tooltip_html += '<div><span><strong>Other:</strong></span>';
+          // tooltip_html += '<span>' + other_projects_sum + '</span></div>';
         }
 
         // Calculate tooltip position
@@ -1586,6 +1591,10 @@ export var calendarHeatmap = {
           // OBSERVER
           const inputYear = document.querySelector('#inputYear');
           inputYear.value = ""
+          // CAMBIAR TITULO
+          const changeTitleMap = document.querySelector('#title-map');
+          changeTitleMap.textContent = "Tendencia Cartográfica";
+        
           
           calendarHeatmap.removeYearOverview();
 

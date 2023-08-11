@@ -27,62 +27,79 @@
     <!-- <svg id="chart" width="600" height="200"></svg> -->
    
     
-    <div class="container">
+    <div class="container" style="margin-left: 80px;">
       <!-- <canvas id="barChartHorizontal"> </canvas> -->
 
-      <div class="mapContainer" style="border-radius: 10px; border: 1px solid lightgray; width:100%; margin-top:1rem; padding:0rem 1rem 1rem 1rem">
-        <div class="d-flex justify-content-center align-items-center">
-          <select id="selectMap">
-            <option value="district">Seleccione una escala</option>
-            <option value="beat">by Beats</option>
-            <option value="ward">by Wards</option>
-            <option value="district">by District</option>
-            <option value="community_area">by Community Area</option>
-          </select>
-        </div>
-        <input id="inputYear" type="text" value = "" hidden>
+      <div class="mapContainer" style="border-radius: 10px; border: 1px solid lightgray; width:1800px; padding:0rem 1rem 1rem 1rem">
+        
         <!-- Aquí va el contenido restante -->
         
         <div class="map-container" style="display: flex; flex-direction: row;">
           <div class="bar_">
-            <p id="title-map">  </p>
-            <canvas id="barChartHorizontal" width="550" height="250"></canvas>
-            <canvas id="densityChart" width="500" height="350"></canvas>
+            
+            <div class="row-bar" style="border-radius: 10px; border: 1px solid lightgray; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
+              <h3>Los 5 Delitos Más Prevalentes</h3>			
+              <canvas id="barChartHorizontal" width="450" height="150"></canvas>
+            </div>
+            <div class="row" style="border-radius: 10px; border: 1px solid lightgray; width:100%; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
+              
+              <form action="main.js" method="">
+                <h3>Serie Temporal</h3>			
+                
+                <!-- <a class="btn btn-primary" href="mapCrime.html" role="button">
+                  <button type="button" class="btn btn-primary" id="btnChicagoMap">Click</button>
+                </a> -->
+                
+                <!-- <canvas id="line-chart-crime" width="800" height="450"></canvas> -->
+                
+                <canvas id="line-chart-crime-types" width="50" height="50"></canvas> 
+
+                <!-- <canvas id="line-chart-crime-months" width="800" height="450"></canvas>    
+
+                <canvas id="line-chart" width="800" height="450"></canvas> -->
+                
+                <button type="button" class="btn btn-primary" id="btnChicagoMap" hidden>Click</button>
+                
+              </form>
+            </div>
+
+            
+            <!-- <canvas id="barChartHorizontal" width="550" height="250"></canvas> -->
+            <!-- <canvas id="densityChart" width="500" height="350"></canvas> -->
+
             <button type="button" class="btn btn-primary" id="barChart" hidden>BarChart</button>
           </div>
-          <div class="map">
-            <!-- <div id="tooltip" style="position: absolute; display: none; background-color: #ffffff; padding: 5px;"></div> -->
-            <!-- <canvas id="barChartHorizontal"> </canvas> -->
+          <div class="row-bar" style="border-radius: 10px;  margin-left: 14px; border: 1px solid lightgray; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
+            <div class="map" style="text-align: center;">
+              <div class="d-flex justify-content-center align-items-center">
+                <select id="selectMap">
+                  <option value="district">Seleccione una escala</option>
+                  <option value="beat">by Beats</option>
+                  <option value="ward">by Wards</option>
+                  <option value="district">by District</option>
+                  <option value="community_area">by Community Area</option>
+                </select>
+              </div>
+              <div id="legend-map"></div>
+              <input id="inputYear" type="text" value = "" hidden>
+              <h3 id="title-map"> Mapa General </h3>
+              <!-- <div id="tooltip" style="position: absolute; display: none; background-color: #ffffff; padding: 5px;"></div> -->
+              <!-- <canvas id="barChartHorizontal"> </canvas> -->
+            </div>
+  
+          </div>
+          <div class="row-bar" style="border-radius: 10px; margin-left: 14px; width: 5500px; border: 1px solid lightgray; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
+            <h3 id="title-radial"> Análisis Radial de Incidencia Criminal por Localidad: Visualizando Comparativas</h3>
+            <div id="chart-radial"></div>
+            <div class="legend-entry"></div>
           </div>
         </div>
        
       </div>
       
-      <div class="row" style="position: relative; border-radius: 10px; border: 1px solid lightgray; width:100%; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
+      <div class="row" style="position: relative; border-radius: 10px; border: 1px solid lightgray; width:100%; margin-left: 250px; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
         <h3>Calendario</h3>
         <div id="showCalendar"></div>
-      </div>
-
-      <div class="row" style="border-radius: 10px; border: 1px solid lightgray; width:100%; margin-top:1rem; padding:0rem 1rem 1rem 1rem;">
-        
-        <form action="main.js" method="">
-          <h3>Serie Temporal</h3>					
-          
-          <!-- <a class="btn btn-primary" href="mapCrime.html" role="button">
-            <button type="button" class="btn btn-primary" id="btnChicagoMap">Click</button>
-          </a> -->
-          
-          <!-- <canvas id="line-chart-crime" width="800" height="450"></canvas> -->
-          
-          <canvas id="line-chart-crime-types" width="800" height="450"></canvas> 
-
-          <!-- <canvas id="line-chart-crime-months" width="800" height="450"></canvas>    
-
-          <canvas id="line-chart" width="800" height="450"></canvas> -->
-          
-          <button type="button" class="btn btn-primary" id="btnChicagoMap" hidden>Click</button>
-          
-        </form>
       </div>
 
       
@@ -99,4 +116,33 @@
     <script type="module" src="src/js/barChart/drawBarChartHor.js"></script>
     <!-- <script type="module" src="src/js/CrimeRate/getCrimeRate.js"></script> -->
   </body>
+  
+  <style>
+    polygon {
+      transition: transform 0.3s; /* Add a transition for smooth scaling */
+    }
+
+    /* Estilos para la leyenda horizontal con cuadros juntos y etiquetas debajo */
+    .legend-horizontal {
+      display: flex;
+      align-items: center;
+    }
+
+    .legend-item {
+      display: inline-block;
+      text-align: center;
+    }
+
+    .legend-color {
+      width: 30px;
+      height: 30px;
+    }
+
+    .legend-label {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+  </style>
+  
 </html>
