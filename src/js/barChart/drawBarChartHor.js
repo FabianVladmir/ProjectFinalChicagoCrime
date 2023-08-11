@@ -114,7 +114,7 @@ function drawMultipleBarChart(data,boundariesCurrent ){
     var gravityData = {
         label: 'BATTERY',
         data: [40, 50, 10, 37, 51, 87],
-        backgroundColor: 'rgba(99, 132, 0, 0.6)',
+        backgroundColor: 'rgba(255, 206, 86, 0.2)',
         borderColor: 'rgba(255, 206, 86, 1)',
         yAxisID: "y-axis-gravity"
     };
