@@ -43,13 +43,22 @@ let chart;
 let chart2;
 function drawTopCrimesTypesBarChart(data,boundariesCurrent, numLocal, sumTotal){
     
+    console.log("DATA REAL");
     console.log(numLocal);
     console.log(sumTotal);
     console.log(boundariesCurrent);
+    console.log(data);
 
+    const dataArray = Object.entries(data);
 
-    const dataLabels = Object.keys(data);
-    const dataValues = Object.values(data);
+    dataArray.sort((a, b) => b[1] - a[1]);
+
+    const top5 = dataArray.slice(0, 5);
+
+    const top5Dictionary = Object.fromEntries(top5);
+
+    const dataLabels = Object.keys(top5Dictionary);
+    const dataValues = Object.values(top5Dictionary);
     
     const ctx = document.getElementById('barChartHorizontal').getContext('2d');
     

@@ -15,7 +15,7 @@ from '../Time Series/drawLine';
 import { rawDataToDateByDay } from "../radialChart/preProcessData";
 import { drawRadialByYear } from "../radialChart/drawRadialChart";
 
-const interpolateColor = d3.interpolateRgb("#FFEECC", "#C51605");
+const interpolateColor = d3.interpolateRgb("#FFFF99", "#FF0000");
 
 var selectedPolygons = [];
 
@@ -153,6 +153,9 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
   var scale = d3.scaleLinear().domain(domain).range(range);
 
   console.log(percentByLocation);
+
+  
+  svg.selectAll("*").remove();
   
   //each boundaries
   for (var i = 0; i < coordinatesList.length; i++) {
@@ -165,7 +168,7 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
         svg.append("polygon").data([coordinatesList[i][j][k]])
         .attr("points", function (d) {
             return d.map(function (d) {
-                return [x(d[0]), y(d[1])].join(",");
+              return [x(d[0])/1.4, y(d[1])/0.9].join(",");
             }).join(" ");
         })
         .attr('stroke-width', 1.5)
@@ -195,11 +198,52 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
         
         // rgb(212, 173, 252)
         .attr("stroke", 'white')
-        .on("mouseover", function () {
-          var originalColor = d3.select(this).attr("fill");  
-          d3.select(this).attr("fill", '#D0D0D0');
+        
+        .on("mouseover", async function () {
+          var originalColor = d3.select(this).attr("fill");
+          var originalStrokeWidth = d3.select(this).attr("stroke-width");
+
+          d3.select(this).attr("stroke-width", 2); 
+
+          var centroid = d3.polygonCentroid(d3.select(this).data()[0]);
+          var xPosition = x(centroid[0]);
+          var yPosition = y(centroid[1]);
+
+          d3.select(this)
+            .style("transform-origin", xPosition + "px " + yPosition + "px")
+            .style("transform", "scale(1.1)"); 
+
+          // d3.select(this).attr("fill", "orange");
+
+          // Hacer que el polígono resaltado se posicione delante de los demás
+          d3.select(this).raise();
+
+          //draw bar
+
+          const numLocal = d3.select(this).attr("subLocation");
+          const byLocalRate= rateCrime[numLocal]
+          let sumTotal = 0;
+          for (const key in byLocalRate) {
+            if (Object.hasOwnProperty.call(byLocalRate, key)) {
+              const element = byLocalRate[key];
+              // content += `${key}: ${element} <br>`;
+              sumTotal += element;
+            }
+          }
+          
+          const dataChicago = await getDataTotal(); 
+              
+          drawTopCrimesTypesBarChart(byLocalRate,boundariesCurrent, numLocal, sumTotal);
+
+          /** invocar la serie temporal */
+          const totalCrimeTypeByRegion = countCrimesPerYearByRegion(dataChicago,boundariesCurrent);
+          drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal);
+
           d3.select(this).on("mouseout", function () {
-            d3.select(this).attr("fill", originalColor);
+            d3.select(this)
+              .attr("stroke-width", originalStrokeWidth)
+              .attr("fill", originalColor)
+              .style("transform", "scale(1)"); "orange"
           });
         })
         // .on("mouseout", function () {
@@ -241,9 +285,10 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
                 //draw
                 drawRadialByYear(dateByDay,parseInt(inputYear.value));
 
-                
-
-          
+                // CAMBIAR TITULO
+                const changeTitleRadial = document.querySelector('#title-radial');
+                let subLocation = d3.select(this).attr("subLocation");
+                changeTitleRadial.textContent += " en el" + boundariesCurrent + " " + subLocation + ", ";
               })
               .catch(error => {
                 console.error('Error:', error);
@@ -255,6 +300,10 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
             
           } else{
 
+            // CAMBIAR TITULO
+            const changeTitleRadial = document.querySelector('#title-radial');
+            // let subLocation = d3.select(this).attr("subLocation");
+            changeTitleRadial.textContent = "Análisis Radial de Incidencia Criminal por Localidad: Visualizando Comparativas";
             
             selectedPolygons = []
 

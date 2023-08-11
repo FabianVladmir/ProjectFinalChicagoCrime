@@ -18,8 +18,8 @@ export function drawRadialByYear(rawdata,year) {
     )
 
     console.log("data of radial funciton", data);
-    const width = 686;
-    const height = 686;
+    const width = 586;
+    const height = 586;
     const margin  = 10;
     const innerRadius = width/5;
     const outerRadius = width/2 - margin;

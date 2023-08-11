@@ -28,9 +28,13 @@ const onChangeSelect = async (event) => {
   const inputYear = document.querySelector('#inputYear');
 
   if (inputYear.value == "") {
+    svg.selectAll("*").remove();
+
     await drawMapGeneral(boundariesCurrent);
     console.log("GENERAL");
   }else{
+    svg.selectAll("*").remove();
+
     console.log("BY YEAR");
     await drawMapByBoundaries(boundariesCurrent,inputYear.value);
   }
@@ -49,10 +53,14 @@ let boundariesDefault = selectChicagoMap.value;
 // slideChicagoMap.addEventListener('change', onChangeSelectByYear);
 
 //** Color */
-const interpolateColor = d3.interpolateRgb("#EFFFFD", "#C51605");
+const interpolateColor = d3.interpolateRgb("#FFFF99", "#FF0000");
+
 drawMapGeneral(boundariesDefault); 
 /** Draw by default */
 //** Draw Map */
+
+
+const dataChicago = await getDataTotal(); 
 
 var selectedPolygons = [];
 
@@ -186,6 +194,8 @@ async function drawMapGeneral(boundariesCurrent) {
   // console.log(percentByLocation);
   
   /**draw Map*/
+
+  const scalingFactor = 0.5
   
   //each boundaries
   for (var i = 0; i < coordinatesList.length; i++) {
@@ -198,7 +208,7 @@ async function drawMapGeneral(boundariesCurrent) {
         svg.append("polygon").data([coordinatesList[i][j][k]])
         .attr("points", function (d) {
             return d.map(function (d) {
-                return [x(d[0]), y(d[1])].join(",");
+                return [x(d[0])/1.4, y(d[1])/0.9].join(",");
             }).join(" ");
         })
         .attr('stroke-width', 1.5)
@@ -240,9 +250,9 @@ async function drawMapGeneral(boundariesCurrent) {
 
           d3.select(this)
             .style("transform-origin", xPosition + "px " + yPosition + "px")
-            .style("transform", "scale(1.2)"); 
+            .style("transform", "scale(1.1)"); 
 
-          d3.select(this).attr("fill", "orange");
+          // d3.select(this).attr("fill", "orange");
 
           // Hacer que el polígono resaltado se posicione delante de los demás
           d3.select(this).raise();
@@ -327,7 +337,6 @@ async function drawMapGeneral(boundariesCurrent) {
           drawTopCrimesTypesBarChart(byLocalRate,boundariesCurrent,  numLocal, sumTotal);
 
           /** invocar la serie temporal */
-          const dataChicago = await getDataTotal(); 
           const totalCrimeTypeByRegion = countCrimesPerYearByRegion(dataChicago,boundariesCurrent);
           drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal);
           
@@ -506,7 +515,7 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
         svg.append("polygon").data([coordinatesList[i][j][k]])
         .attr("points", function (d) {
             return d.map(function (d) {
-                return [x(d[0]), y(d[1])].join(",");
+                return [x(d[0])/1.4, y(d[1])/0.9].join(",");
             }).join(" ");
         })
         .attr('stroke-width', 1.5)
@@ -536,11 +545,58 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
         
         // rgb(212, 173, 252)
         .attr("stroke", 'white')
-        .on("mouseover", function () {
-          var originalColor = d3.select(this).attr("fill");  
-          d3.select(this).attr("fill", '#D0D0D0');
+        // .on("mouseover", function () {
+        //   var originalColor = d3.select(this).attr("fill");  
+        //   d3.select(this).attr("fill", '#D0D0D0');
+        //   d3.select(this).on("mouseout", function () {
+        //     d3.select(this).attr("fill", originalColor);
+        //   });
+        // })
+        .on("mouseover", async function () {
+          var originalColor = d3.select(this).attr("fill");
+          var originalStrokeWidth = d3.select(this).attr("stroke-width");
+
+          d3.select(this).attr("stroke-width", 2); 
+
+          var centroid = d3.polygonCentroid(d3.select(this).data()[0]);
+          var xPosition = x(centroid[0]);
+          var yPosition = y(centroid[1]);
+
+          d3.select(this)
+            .style("transform-origin", xPosition + "px " + yPosition + "px")
+            .style("transform", "scale(1.1)"); 
+
+          // d3.select(this).attr("fill", "orange");
+
+          // Hacer que el polígono resaltado se posicione delante de los demás
+          d3.select(this).raise();
+
+          //draw bar
+
+          const numLocal = d3.select(this).attr("subLocation");
+          const byLocalRate= rateCrime[numLocal]
+          let sumTotal = 0;
+          for (const key in byLocalRate) {
+            if (Object.hasOwnProperty.call(byLocalRate, key)) {
+              const element = byLocalRate[key];
+              // content += `${key}: ${element} <br>`;
+              sumTotal += element;
+            }
+          }
+          
+          const dataChicago = await getDataTotal(); 
+              
+          drawTopCrimesTypesBarChart(byLocalRate,boundariesCurrent, numLocal, sumTotal);
+
+          /** invocar la serie temporal */
+          const totalCrimeTypeByRegion = countCrimesPerYearByRegion(dataChicago,boundariesCurrent);
+          drawTotalCrimeTypesByRegionTimeSeries(totalCrimeTypeByRegion,numLocal);
+
           d3.select(this).on("mouseout", function () {
-            d3.select(this).attr("fill", originalColor);
+            d3.select(this)
+              .attr("stroke-width", originalStrokeWidth)
+              .attr("fill", originalColor)
+              .style("transform", "scale(1)"); "orange"
           });
         })
         // .on("mouseout", function () {
@@ -581,8 +637,10 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
                 console.log(inputYear.value);
                 //draw
                 drawRadialByYear(dateByDay,inputYear.value);
-                
-
+                // CAMBIAR TITULO
+                const changeTitleRadial = document.querySelector('#title-radial');
+                let subLocation = d3.select(this).attr("subLocation");
+                changeTitleRadial.textContent += "en la localidad del " + boundariesCurrent + " " + subLocation;
           
               })
               .catch(error => {
@@ -595,6 +653,11 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
             
           } else{
 
+            // CAMBIAR TITULO
+            const changeTitleRadial = document.querySelector('#title-radial');
+            // let subLocation = d3.select(this).attr("subLocation");
+            changeTitleRadial.textContent = "Análisis Radial de Incidencia Criminal por Localidad: Visualizando Comparativas";
+            
             
             selectedPolygons = []
 
@@ -651,3 +714,42 @@ export async function drawMapByBoundaries(boundariesCurrent,byYear){
     }
   }
 }
+
+const legendContainer = d3.select("#legend-map");
+const width = 400;
+const height = 80;
+
+const gradient = legendContainer.append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .append("defs")
+    .append("linearGradient")
+      .attr("id", "color-gradient")
+      .attr("x1", "0%").attr("y1", "0%")
+      .attr("x2", "100%").attr("y2", "0%");
+
+for (let i = 0; i <= 100; i++) {
+  gradient.append("stop")
+    .attr("offset", i + "%")
+    .attr("stop-color", interpolateColor(i / 100))
+    .attr("stop-opacity", 1);
+}
+
+legendContainer.select("svg").append("rect")
+  .attr("x", 10)
+  .attr("y", height / 2 - 10)
+  .attr("width", width - 20)
+  .attr("height", 20)
+  .style("fill", "url(#color-gradient)");
+
+legendContainer.select("svg").append("text")
+  .attr("x", 10)
+  .attr("y", height / 2 - 30)
+  .attr("text-anchor", "start")
+  .text("Baja Intensidad");
+
+legendContainer.select("svg").append("text")
+  .attr("x", width - 10)
+  .attr("y", height / 2 - 30)
+  .attr("text-anchor", "end")
+  .text("Alta Intensidad");
